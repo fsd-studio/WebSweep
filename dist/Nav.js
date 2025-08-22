@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+'use client';
+
+import React, { useCallback,
+useState } from 'react';
 import Button from './Button.jsx';
 import { motion } from "motion/react";
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
