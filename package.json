@@ -1,6 +1,6 @@
 {
   "name": "fsd-components",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "private": false,
   "description": "FSD Studio component library",
   "main": "src/components/index.js",
