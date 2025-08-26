@@ -4,6 +4,7 @@ function FSDImage({
   src = 'https://placehold.co/400x600/png',
   alt = 'image',
   quality = 75,
+  style = '',
   ...props
 }) {
   return (
@@ -11,7 +12,7 @@ function FSDImage({
       width={600}
       height={600}
       style={{
-          objectFit: 'cover'
+          objectFit: 'cover',
         }
       }
       src={src}
@@ -19,6 +20,7 @@ function FSDImage({
       placeholder="blur"
       quality={quality}
       {...props}
+      
     />
   );
 }
