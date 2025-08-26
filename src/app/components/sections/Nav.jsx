@@ -7,7 +7,7 @@ import Section from '../ui/Section.jsx';
 
 const Nav = ({ 
   children, 
-  logo = '/LOGO-PRIMARY.png',
+  logo = '/template/logo.png',
   links = ["About", "Menu", "Gallery", "Contact"],
   ...props 
 }) => {
@@ -20,11 +20,11 @@ const Nav = ({
       {/* navigation bar */}
       <div className='left-0 absolute w-full z-50 top-0'>
         <nav>
-          <Section className="!py-0">
+          <Section outerC="!py-0">
             <div className='flex items-center h-20 md:h-28 lg:h-26 justify-between w-full'>
               {/* Logo */}
               <a href="/">
-                <img src={logo} className='h-10 w-auto' alt="logo" />
+                <img src={logo} className='h-10 md:h-[60px] w-auto' alt="logo" />
               </a>
               {children}
 
@@ -37,7 +37,8 @@ const Nav = ({
 
               {/* Mobile menu button */}
               <div className='lg:hidden flex items-center'>
-                <Button className='!bg-opacity-0' size="md" onClick={() => setMobileOpen(!mobileOpen)} variant='primary'>open</Button>
+                <Button className='!bg-opacity-0 md:hidden' size="md" onClick={() => setMobileOpen(!mobileOpen)} variant='primary'>open</Button>
+                <Button className='!bg-opacity-0 hidden md:block' size="lg" onClick={() => setMobileOpen(!mobileOpen)} variant='primary'>open</Button>
               </div>
             </div>
           </Section>
