@@ -11,7 +11,7 @@ function HeroMinimalist({
       {/* Content */}
       <Section className="!pt-29 lg:!pt-32">
         <div className="grid grid-cols-1 md:grid-cols-8 gap-14 md:gap-8 lg:gap-20">
-            <div className="md:col-span-2 col-span-1 order-2 md:order-1">
+            <div className="md:col-span-2 order-2 md:order-1">
                 <div className="text-primary space-y-12 text-center md:text-start w-[80%] mx-auto md:w-full">
                     <h2 className="font-semibold underline-offset-2 underline text-xl">MAKE A RESERVATION</h2>
                     <div>
