@@ -1,11 +1,4 @@
 import Head from "next/head";
-import Gallery from "./components/sections/Gallery";
-import Nav from './components/sections/Nav';
-import HeroMinimalist from "./components/sections/hero/HeroMinimalist";
-import Menu from "./components/sections/Menu";
-import MapInfo from './components/sections/contact/MapInfo';
-import Footer from './components/sections/footer/Footer';
-import HeroTextImage from './components/sections/hero/HeroTextImage';
 
 export default function Home() {
   return (
@@ -37,21 +30,7 @@ export default function Home() {
       </Head>
 
       <div>
-        {/* <Nav></Nav> */}
-
-        <Menu></Menu>
-
-        {/* <Hero></Hero> */}
-        {/* <HeroMinimalist></HeroMinimalist> */}
-
-        <HeroTextImage></HeroTextImage>
-
-        <MapInfo></MapInfo>
-        {/* <Info></Info> */}
-
-        <Gallery></Gallery>
-
-        <Footer></Footer>
+          
       </div>
     </>
   );
