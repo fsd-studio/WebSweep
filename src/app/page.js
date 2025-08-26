@@ -1,7 +1,9 @@
 import Head from "next/head";
-import Gallery from './components/sections/Gallery';
+import Gallery from "./components/sections/Gallery";
 import Nav from './components/sections/Nav';
-import HeroMinimalist from "./components/sections/hero/HeroMinimalist";
+import MapInfo from './components/sections/contact/MapInfo';
+import Footer from './components/sections/footer/Footer';
+import HeroTextImage from './components/sections/hero/HeroTextImage';
 
 export default function Home() {
   return (
@@ -35,9 +37,15 @@ export default function Home() {
       <div>
         <Nav></Nav>
         {/* <Hero></Hero> */}
-        <HeroMinimalist></HeroMinimalist>
-        
+        {/* <HeroMinimalist></HeroMinimalist> */}
+        <HeroTextImage></HeroTextImage>
+
+        <MapInfo></MapInfo>
+        {/* <Info></Info> */}
+
         <Gallery></Gallery>
+
+        <Footer></Footer>
       </div>
     </>
   );

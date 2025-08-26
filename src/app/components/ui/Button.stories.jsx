@@ -61,6 +61,11 @@ export const AllVariants = {
 
 // All sizes showcase
 export const AllSizes = {
+  args: {
+    outline: true,
+    disabled: true
+  },
+
   render: () => (
     <div className="flex flex-wrap items-center gap-4">
       <Button variant="primary" size="sm">Small</Button>
@@ -68,7 +73,7 @@ export const AllSizes = {
       <Button variant="primary" size="lg">Large</Button>
       <Button variant="primary" size="xl">Extra Large</Button>
     </div>
-  ),
+  )
 }
 
 // Interactive examples
@@ -77,5 +82,6 @@ export const WithClickHandler = {
     variant: 'primary',
     children: 'Click Me!',
     onClick: () => alert('Button clicked!'),
+    outline: true
   },
 }

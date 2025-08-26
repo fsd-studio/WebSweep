@@ -1,7 +1,7 @@
-function Section({children, className}) {
+function Section({children, outerC, innerC}) {
   return (
-    <div className={`${className} py-18 px-6 md:px-10`}>
-      <div className={`lg:max-w-[1360px] mx-auto`}>
+    <div className={`${outerC} py-18 px-6 md:px-10 overflow-hidden`}>
+      <div className={`${innerC} lg:max-w-[1360px] mx-auto`}>
           {children}
       </div>
     </div>
