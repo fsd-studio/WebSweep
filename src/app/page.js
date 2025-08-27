@@ -1,4 +1,9 @@
 import Head from "next/head";
+import Gallery from './components/sections/Gallery';
+import Nav from './components/sections/Nav';
+import ContactForm from "./components/sections/contact/ContactForm";
+import Footer from './components/sections/footer/Footer';
+import HeroTextImage from './components/sections/hero/HeroTextImage';
 
 export default function Home() {
   return (
@@ -30,7 +35,15 @@ export default function Home() {
       </Head>
 
       <div>
-          
+          <Nav></Nav>
+
+          <HeroTextImage></HeroTextImage>
+
+          <ContactForm></ContactForm>
+
+          <Gallery></Gallery>
+
+          <Footer></Footer>
       </div>
     </>
   );
