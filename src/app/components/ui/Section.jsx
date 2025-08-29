@@ -1,3 +1,4 @@
+
 function Section({children, outerC, innerC}) {
   return (
     <div className={`${outerC} py-18 px-6 md:px-10 overflow-hidden`}>

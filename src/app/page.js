@@ -1,11 +1,12 @@
 'use client'
 
 import Head from "next/head";
-import Gallery from "./components/sections/Gallery";
+import Gallery from './components/sections/Gallery';
 import Nav from './components/sections/Nav';
 import HeroMinimalist from "./components/sections/hero/HeroMinimalist";
 import Menu from "./components/sections/menu/Menu";
 import MapInfo from './components/sections/contact/MapInfo';
+import ContactForm from "./components/sections/contact/ContactForm";
 import Footer from './components/sections/footer/Footer';
 import HeroTextImage from './components/sections/hero/HeroTextImage';
 import MenuElegant from "./components/sections/menu/MenuElegant";
@@ -62,15 +63,12 @@ export default function Home() {
         {/* <Nav></Nav> */}
 
         {/* <Menu></Menu> */}
-        <MenuElegant />        
-
-        {/* <Hero></Hero> */}
-        {/* <HeroMinimalist></HeroMinimalist> */}
+        <MenuElegant />     
+        <Nav></Nav>
 
         <HeroTextImage></HeroTextImage>
 
-        <MapInfo></MapInfo>
-        {/* <Info></Info> */}
+        <ContactForm></ContactForm>
 
         <Gallery></Gallery>
 
