@@ -1,13 +1,34 @@
+'use client'
+
 import Head from "next/head";
 import Gallery from "./components/sections/Gallery";
 import Nav from './components/sections/Nav';
 import HeroMinimalist from "./components/sections/hero/HeroMinimalist";
-import Menu from "./components/sections/Menu";
+import Menu from "./components/sections/menu/Menu";
 import MapInfo from './components/sections/contact/MapInfo';
 import Footer from './components/sections/footer/Footer';
 import HeroTextImage from './components/sections/hero/HeroTextImage';
+import MenuElegant from "./components/sections/menu/MenuElegant";
+import { productService } from '../services/api';
+import { useEffect, useState } from "react";
+
 
 export default function Home() {
+  const [restaurantData, setRestaurantData] = useState(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await productService.getAllRestaurants();
+        setRestaurantData(response.data);
+        console.log(response.data[0].name);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchProducts();
+  }, []);
+
   return (
     <>
       <Head>
@@ -37,9 +58,11 @@ export default function Home() {
       </Head>
 
       <div>
+        {restaurantData && <p>{restaurantData[0].name}</p>} 
         {/* <Nav></Nav> */}
 
-        <Menu></Menu>
+        {/* <Menu></Menu> */}
+        <MenuElegant />        
 
         {/* <Hero></Hero> */}
         {/* <HeroMinimalist></HeroMinimalist> */}
