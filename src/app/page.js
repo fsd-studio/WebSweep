@@ -4,6 +4,7 @@ import Nav from './components/sections/Nav';
 import ContactForm from "./components/sections/contact/ContactForm";
 import Footer from './components/sections/footer/Footer';
 import HeroTextImage from './components/sections/hero/HeroTextImage';
+import ReserveButton from "./components/ui/ReserveButton";
 
 export default function Home() {
   return (
@@ -44,6 +45,8 @@ export default function Home() {
           <Gallery></Gallery>
 
           <Footer></Footer>
+
+          <ReserveButton></ReserveButton>
       </div>
     </>
   );
