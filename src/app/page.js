@@ -9,6 +9,7 @@ import MapInfo from './components/sections/contact/MapInfo';
 import ContactForm from "./components/sections/contact/ContactForm";
 import Footer from './components/sections/footer/Footer';
 import HeroTextImage from './components/sections/hero/HeroTextImage';
+import ReserveButton from "./components/ui/ReserveButton";
 import MenuElegant from "./components/sections/menu/MenuElegant";
 import { productService } from '../services/api';
 import { useEffect, useState } from "react";
@@ -72,7 +73,9 @@ export default function Home() {
 
         <Gallery></Gallery>
 
-        <Footer></Footer>
+          <Footer></Footer>
+
+          <ReserveButton></ReserveButton>
       </div>
     </>
   );

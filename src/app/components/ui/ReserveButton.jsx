@@ -1,19 +1,26 @@
+"use client"
+
+import { useState } from 'react';
 import { FaCalendarAlt } from 'react-icons/fa';
 import Section from './Section';
 
 function ReserveButton() {
+  const [open, isOpen] = useState(false)
+
   return (
-    <Section innerC="">
-      <div className='fixed w-[80%] ms-auto'>
-        <div className="bg-primary h-90 w-full mb-2 rounded-4xl">
+    <div className="fixed bottom-4 right-0 w-full z-50">
+      <Section outerC="!py-0 !px-0 !overflow-visible" innerC="px-6 md:px-10 lg:px-0 lg:max-w-[1360px] mx-auto">
+          {/* Decorative background */}
+          <div className={`bg-primary h-24 w-full mb-2 rounded-4xl ${open ? "" : "hidden"}`}></div>
 
-        </div>
+          {/* Floating button */}
+          <button onClick={() => isOpen(!open)} className="w-20 h-20 flex items-center justify-center bg-primary ms-auto border-secondary rounded-full shadow-lg">
+            <FaCalendarAlt className="w-8 h-auto text-secondary" />
+          </button>
 
-        <div className="p-4 bg-primary ms-auto w-fit border-6 border-blue-900 rounded-full z-50">
-            <FaCalendarAlt className='w-8 text-secondary h-auto'/>
-        </div>
-      </div>
-    </Section> 
+
+      </Section>
+    </div>
   );
 }
 
