@@ -2,7 +2,7 @@
 
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import Button from '../ui/Button.jsx';
+import HamburgerMenu from '../ui/HamburgerMenu.jsx';
 import Section from '../ui/Section.jsx';
 
 const Nav = ({ 
@@ -15,10 +15,10 @@ const Nav = ({
   const [mobileOpen, setMobileOpen] = useState(false)
   
   return (
-    <div className='overflow-hidden'>
+    <div className={`overflow-hidden ${mobileOpen && "no-doc-scroll"}`}>
       
       {/* navigation bar */}
-      <div className='left-0 absolute w-full z-50 top-0'>
+      <div className='left-0 fixed w-full z-50 top-0 '>
         <nav>
           <Section outerC="!py-0">
             <div className='flex items-center h-20 md:h-28 lg:h-26 justify-between w-full'>
@@ -37,8 +37,9 @@ const Nav = ({
 
               {/* Mobile menu button */}
               <div className='lg:hidden flex items-center'>
-                <Button className='!bg-opacity-0 md:hidden' size="md" onClick={() => setMobileOpen(!mobileOpen)} variant='primary'>open</Button>
-                <Button className='!bg-opacity-0 hidden md:block' size="lg" onClick={() => setMobileOpen(!mobileOpen)} variant='primary'>open</Button>
+                <HamburgerMenu onClick={() => setMobileOpen(!mobileOpen)} isOpen={mobileOpen} />
+                {/* <Button className='!bg-opacity-0 md:hidden' size="md" onClick={() => setMobileOpen(!mobileOpen)} variant='primary'>open</Button> */}
+                {/* <Button className='!bg-opacity-0 hidden ?:block' size="lg" onClick={() => setMobileOpen(!mobileOpen)} variant='primary'>open</Button> */}
               </div>
             </div>
           </Section>
@@ -69,7 +70,7 @@ const Nav = ({
             },
           },
         }}
-        className={`lg:hidden bg-primary origin-top absolute z-20 top-0 left-0 h-screen w-full overflow-hidden`}>
+        className={`lg:hidden bg-primary origin-top fixed z-40 top-0 left-0 h-screen w-full overflow-hidden`}>
           <div className='flex flex-col justify-center items-center h-full'>
             {links.map((title, index) => (
               <div key={index} className='overflow-hidden'>

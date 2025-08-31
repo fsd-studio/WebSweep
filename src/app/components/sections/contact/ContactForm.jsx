@@ -53,16 +53,18 @@ function ContactForm() {
             setErrorState(initialState)
             setSuccess(false)
 
-            if (!Form.safeParse(formData).success) {
+            const parsed = Form.safeParse(formData)
+
+            if (!parsed.success) {
                 setErrorState({ 
                     ...initialState,
-                    ...z.flattenError(Form.safeParse(formData).error).fieldErrors
+                    ...z.flattenError(parsed.error).fieldErrors
                 })
 
                 return;
             }
 
-            setLoading(true)
+            setLoading(true);
 
             const res = await fetch("/api/sendMail", {
                 method: "POST",
