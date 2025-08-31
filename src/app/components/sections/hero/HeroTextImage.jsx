@@ -9,7 +9,7 @@ function HeroTextImage({
   src = Image
 }) {
   return (
-    <Section outerC="bg-orange-200 relative">
+    <Section outerC="bg-orange-200 relative z-30">
         {/* Floating orbs */}
         <div className='w-100 h-100 hidden -bottom-30 -left-20 md:block lg:bottom-auto lg:top-30 lg:-left-60 rounded-full bg-red-600/50 absolute'></div>
         <div className='w-100 h-100 hidden -top-30 -right-30 md:block lg:top-auto lg:-bottom-10 lg:-right-60 rounded-full bg-green-600/50 absolute'></div>
