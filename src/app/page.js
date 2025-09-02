@@ -12,6 +12,9 @@ import MenuElegant from "./components/sections/menu/MenuElegant";
 import { productService } from '../services/api';
 import { useEffect, useState } from "react";
 
+import ChangeHours from "./cms/changeHours";
+import ChangeMenu from "./cms/changeMenu";
+
 
 export default function Home() {
   const [restaurantData, setRestaurantData] = useState(null);
@@ -58,8 +61,11 @@ export default function Home() {
       </Head>
 
       <div>
-        {restaurantData && <p>{restaurantData[0].name}</p>} 
+        {/* {restaurantData && <p>{restaurantData[0].name}</p>}  */}
         {/* <Nav></Nav> */}
+
+        <ChangeMenu />
+        <ChangeHours />
 
         {/* <Menu></Menu> */}
         <MenuElegant />        
