@@ -12,8 +12,8 @@ const Nav = ({
   ...props 
 }) => {
 
-  const [mobileOpen, setMobileOpen] = useState(false)
-  
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   return (
     <div className={`overflow-hidden ${mobileOpen && "no-doc-scroll"}`}>
       

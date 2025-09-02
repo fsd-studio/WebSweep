@@ -1,22 +1,23 @@
 'use client'
 
 import Head from "next/head";
+import { useEffect, useState } from "react";
+import { useTranslation } from 'react-i18next';
+import { productService } from '../services/api';
 import Gallery from './components/sections/Gallery';
 import Nav from './components/sections/Nav';
-import HeroMinimalist from "./components/sections/hero/HeroMinimalist";
-import Menu from "./components/sections/menu/Menu";
-import MapInfo from './components/sections/contact/MapInfo';
 import ContactForm from "./components/sections/contact/ContactForm";
 import Footer from './components/sections/footer/Footer';
 import HeroTextImage from './components/sections/hero/HeroTextImage';
-import ReserveButton from "./components/ui/ReserveButton";
 import MenuElegant from "./components/sections/menu/MenuElegant";
-import { productService } from '../services/api';
-import { useEffect, useState } from "react";
+import ReserveButton from "./components/ui/ReserveButton";
+
+import '../../i18n';
 
 
 export default function Home() {
   const [restaurantData, setRestaurantData] = useState(null);
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -64,8 +65,13 @@ export default function Home() {
         {/* <Nav></Nav> */}
 
         {/* <Menu></Menu> */}
-        <MenuElegant />     
-        <Nav></Nav>
+        <MenuElegant />  
+
+        {/* Language implementation example 
+        
+            Here I define a namespace for each item, if I didn't it would try to take it from common.json
+        */}
+        <Nav links={ [t("about", { ns: "nav" }), t("menu", { ns: "nav" }), t("gallery", { ns: "nav" }), t("contact", { ns: "nav" })] }></Nav>
 
         <HeroTextImage></HeroTextImage>
 
@@ -73,9 +79,9 @@ export default function Home() {
 
         <Gallery></Gallery>
 
-          <Footer></Footer>
+        <Footer></Footer>
 
-          <ReserveButton></ReserveButton>
+        <ReserveButton></ReserveButton>
       </div>
     </>
   );
