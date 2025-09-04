@@ -2,16 +2,20 @@
 
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import HamburgerMenu from '../ui/HamburgerMenu.jsx';
-import Section from '../ui/Section.jsx';
+import HamburgerMenu from '../../ui/HamburgerMenu.jsx';
+import Section from '../../ui/Section.jsx';
+
+import { useTranslation } from 'next-i18next';
+import { LangSwitcherMinimalist, LangSwitcherMobile } from './LangSwitcher.jsx';
 
 const Nav = ({ 
   children, 
   logo = '/template/logo.png',
-  links = ["About", "Menu", "Gallery", "Contact"],
   ...props 
 }) => {
+  const { t } = useTranslation('nav');
 
+  const links = [t('about'), t('menu'), t('gallery'), t('contact')];
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -26,7 +30,12 @@ const Nav = ({
               <a href="/">
                 <img src={logo} className='h-10 md:h-[60px] w-auto' alt="logo" />
               </a>
+              
               {children}
+              
+              <div>
+                <LangSwitcherMinimalist />
+              </div>
 
               {/* Large screen navigation */}
               <div className='hidden lg:flex gap-6'>
@@ -35,16 +44,17 @@ const Nav = ({
                 ))}
               </div>
 
+
               {/* Mobile menu button */}
               <div className='lg:hidden flex items-center'>
                 <HamburgerMenu onClick={() => setMobileOpen(!mobileOpen)} isOpen={mobileOpen} />
-                {/* <Button className='!bg-opacity-0 md:hidden' size="md" onClick={() => setMobileOpen(!mobileOpen)} variant='primary'>open</Button> */}
-                {/* <Button className='!bg-opacity-0 hidden ?:block' size="lg" onClick={() => setMobileOpen(!mobileOpen)} variant='primary'>open</Button> */}
               </div>
             </div>
           </Section>
         </nav>
       </div>
+
+      <div className='h-20 md:h-28 lg:h-26 bg-secondary'></div>
 
       {/* Expanded mobile menu */}
       <motion.nav initial={false}
@@ -86,6 +96,8 @@ const Nav = ({
                 className='text-secondary text-3xl text-center font-serif w-full block mt-6' href={`/#${title}`}>{title}</motion.a>
               </div>
             ))}
+
+            <LangSwitcherMobile></LangSwitcherMobile>
           </div>
       </motion.nav>
     </div>

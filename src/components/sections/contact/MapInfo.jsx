@@ -1,9 +1,9 @@
 import { FaPhoneAlt } from 'react-icons/fa';
 import { FaLocationPin } from 'react-icons/fa6';
 import { LuMail } from 'react-icons/lu';
-import Button from './../../ui/Button';
-import GoogleMaps from './../../ui/GoogleMaps';
-import Section from './../../ui/Section';
+import Button from '../../ui/Button';
+import GoogleMaps from '../../ui/GoogleMaps';
+import Section from '../../ui/Section';
 
 
 function MapInfo({ 

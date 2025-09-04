@@ -9,7 +9,7 @@ function HeroMinimalist({
   return (
     <div className="bg-secondary w-full">
       {/* Content */}
-      <Section className="!pt-29 lg:!pt-32">
+      <Section outerC="!pt-10">
         <div className="grid grid-cols-1 md:grid-cols-8 gap-14 md:gap-8 lg:gap-20">
             <div className="md:col-span-2 order-2 md:order-1">
                 <div className="text-primary space-y-12 text-center md:text-start w-[80%] mx-auto md:w-full">

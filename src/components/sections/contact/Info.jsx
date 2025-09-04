@@ -1,4 +1,4 @@
-import Section from "app/components/ui/Section";
+import Section from "pages/components/ui/Section";
 
 function Info({
     location = "country, city 2640, street 24",
