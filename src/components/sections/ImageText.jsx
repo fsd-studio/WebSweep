@@ -1,5 +1,5 @@
+import FSDImage from '../ui/FSDImage';
 import Section from "../ui/Section";
-import FSDImage from './../ui/FSDImage';
 
 function ImageText() {
   return (

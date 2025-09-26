@@ -1,6 +1,6 @@
-import { Button } from "app/components";
-import Section from "app/components/ui/Section";
-import FSDImage from './../../ui/FSDImage';
+import Section from "components/ui/Section";
+import { Button } from "pages";
+import FSDImage from '../../ui/FSDImage';
 import Logo from "/public/template/logo.png";
 
 import {
