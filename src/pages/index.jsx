@@ -1,6 +1,7 @@
 import ContactForm from "components/sections/contact/ContactForm";
-import Gallery from "components/sections/Gallery";
+import Gallery from "components/sections/gallery/Gallery";
 import HeroMinimalist from "components/sections/hero/HeroMinimalist";
+import MarqueeSection, { MarqueeSectionImage } from "components/sections/MarqueeSection";
 import ReserveButton from "components/ui/ReserveButton";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from "next/head";
@@ -45,7 +46,8 @@ export default function Home() {
 
       <div>
         <HeroMinimalist />
-        
+        <MarqueeSection />
+        <MarqueeSectionImage />
         <ContactForm />
         <Gallery />
         <ReserveButton />

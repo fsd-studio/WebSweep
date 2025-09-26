@@ -30,7 +30,7 @@ const Nav = ({
               <a href="/">
                 <img src={logo} className='h-10 md:h-[60px] w-auto' alt="logo" />
               </a>
-              
+
               {children}
               
               <div>
