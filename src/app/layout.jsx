@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -11,6 +12,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const fontPrimary = localFont({
+  src: "./fonts/DO.otf", 
+  variable: "--font-primary",
+  display: "swap",
+});
+
 export const metadata = {
   title: "fsd template", 
   description: "component & template library",
@@ -20,7 +27,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${fontPrimary.variable} antialiased`}
       >
         {children}
       </body>

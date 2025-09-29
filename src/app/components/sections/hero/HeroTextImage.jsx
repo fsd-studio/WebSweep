@@ -15,7 +15,7 @@ function HeroTextImage({
         <div className='w-100 h-100 hidden -top-30 -right-30 md:block lg:top-auto lg:-bottom-10 lg:-right-60 rounded-full bg-green-600/50 absolute'></div>
 
         <div className='text-center md:text-start lg:text-center mt-12 md:mt-16 lg:mt-6 mb-10 max-w-[80%] mx-auto'>
-            <h1 className='text-7xl md:text-[60px] lg:text-9xl lg:uppercase font-black'>{title}</h1>
+            <h1 className='text-7xl md:text-[60px] lg:text-9xl lg:uppercase font-primary font-black'>{title}</h1>
             <h2 className='text-xl md:text-2xl mt-8 w-[50%] hidden md:block lg:hidden'>Affordable, high-quality web design with <span className='font-bold '>transparent</span> communication.</h2>
         </div>
         <FSDImage
