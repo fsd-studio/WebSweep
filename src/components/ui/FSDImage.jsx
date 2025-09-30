@@ -1,12 +1,16 @@
 import Image from 'next/image';
 
 function FSDImage({
-  src = 'https://placehold.co/400x600/png',
+  src = 'public/template/600x400',
   alt = 'image',
   quality = 75,
   style = '',
+
+  // priority for images in LCP
+  priority = false,
   ...props
 }) {
+
   return (
     <Image
       width={600}
@@ -17,7 +21,8 @@ function FSDImage({
       }
       src={src}
       alt={alt}
-      placeholder="blur"
+      priority={priority}
+      // placeholder="blur"
       quality={quality}
       {...props}
       

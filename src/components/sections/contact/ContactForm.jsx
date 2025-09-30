@@ -1,15 +1,15 @@
 "use client"
 
-import { Button } from "app/components";
-import GoogleMaps from "app/components/ui/GoogleMaps";
-import Input from "app/components/ui/Input";
-import Section from "app/components/ui/Section";
+import Button from "components/ui/Button";
+import GoogleMaps from "components/ui/GoogleMaps";
+import Input from "components/ui/Input";
+import Section from "components/ui/Section";
 import { useState } from "react";
 
 import * as z from "zod";
 
 
-function ContactForm() {
+export default function ContactForm() {
     const initialState = {
         name: null,
         email: null,
@@ -142,5 +142,3 @@ function ContactForm() {
         </div>
     );
 }
-
-export default ContactForm;

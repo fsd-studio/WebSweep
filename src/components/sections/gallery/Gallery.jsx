@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { Lightbox } from 'yet-another-react-lightbox';
 import "yet-another-react-lightbox/styles.css";
-import FSDImage from "../ui/FSDImage";
-import Section from "../ui/Section";
+import FSDImage from "../../ui/FSDImage";
+import Section from "../../ui/Section";
 import heroMinimalist from '/public/template/400x600.png';
 
 function Gallery() {
