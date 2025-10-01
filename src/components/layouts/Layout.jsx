@@ -2,9 +2,9 @@
 import Footer from "components/sections/footer/Footer";
 import Nav from "components/sections/nav/Nav";
 
-export default function Layout({ children }) {
+export default function Layout({ children, fonts }) {
   return (
-    <div>
+    <div className={`${fonts}`}>
       {/* Pass nav translations to the Nav component */}
       <Nav />
 

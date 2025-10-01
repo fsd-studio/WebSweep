@@ -20,6 +20,7 @@
   --color-foreground: var(--foreground);
   --font-primary: var(--font-primary);
   --font-sans: var(--font-geist-sans);
+  --font-primary: var(--font-primary);
   --font-mono: var(--font-geist-mono);
 }
 
