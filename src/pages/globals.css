@@ -19,6 +19,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
+  --font-primary: var(--font-primary);
   --font-mono: var(--font-geist-mono);
 }
 
