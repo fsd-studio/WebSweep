@@ -2,6 +2,7 @@ import Layout from "components/layouts/Layout";
 import { appWithTranslation } from "next-i18next";
 import { Geist, Geist_Mono } from "next/font/google";
 import LocalFont from "next/font/local";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -23,6 +24,12 @@ const fontPrimary = LocalFont({
 function MyApp({ Component, pageProps }) {
   return (
     <Layout fonts={`${geistSans.variable} ${geistMono.variable} ${fontPrimary.variable}`}>
+      <Toaster
+        position="top-right"
+        richColors
+        closeButton
+        expand={false}
+      />
       <Component {...pageProps} />
     </Layout>
   );
