@@ -1,4 +1,5 @@
 import HeadComponent from "components/config/HeadComponent";
+import HTMLValidationModule from "components/modules/HTMLValidationModule/HTMLValidationModule";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export async function getServerSideProps({ locale }) {
@@ -10,12 +11,13 @@ export async function getServerSideProps({ locale }) {
   };
 }
 
+
 export default function Home() {
   return (
     <>
       <HeadComponent
       />
-      
+      <HTMLValidationModule></HTMLValidationModule>
     </>
   );
 }

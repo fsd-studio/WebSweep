@@ -3,7 +3,7 @@ import Input from "components/ui/Input";
 import { useState } from "react";
 import { toast } from "sonner";
 
-function Lighthouse() {
+function WebScrapingModule() {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState(null);
     const [url, setUrl] = useState('https://example.com');
@@ -68,4 +68,4 @@ function MetricCard({ title, value }) {
     );
 }
 
-export default Lighthouse;
+export default WebScrapingModule;

@@ -1,5 +1,5 @@
 import HeadComponent from "components/config/HeadComponent";
-import Lighthouse from "components/web_scraping_module/Lighthouse";
+import Lighthouse from "components/modules/webScrapingModule/webScrapingModule";
 
 function index() {
   return (
