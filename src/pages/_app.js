@@ -26,7 +26,7 @@ const queryClient = new QueryClient()
 
 function MyApp({ Component, pageProps }) {
   return (
-    <QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
       <Layout fonts={`${geistSans.variable} ${geistMono.variable} ${fontPrimary.variable}`}>
         <Toaster
           position="top-right"
