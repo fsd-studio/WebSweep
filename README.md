@@ -52,3 +52,11 @@ function YourComponent() {
     
 }
 # ------------------
+
+
+3. **For GEO:**
+   
+   Rename the environment file and add your Together.ai API key:
+ 
+       mv envAPIkey .env
+
