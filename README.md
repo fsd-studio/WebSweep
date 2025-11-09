@@ -13,8 +13,8 @@ This runs the server that handles the web scraping logic, available at http://lo
 Environment Setup & Dependencies:
 
 python -m venv venv 
-source venv/bin/activate  # macOS/Linux
-# Use venv\Scripts\activate for Windows
+source venv/bin/activate  for macOS/Linux
+Use venv\Scripts\activate for Windows
 pip install flask flask-cors requests beautifulsoup4
 
 
