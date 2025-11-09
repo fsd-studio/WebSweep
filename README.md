@@ -43,11 +43,12 @@ The application will start, and the GeoData component will automatically call th
 2. Accessing Scraped Data (For Developers)
 
 The final scraped JSON data is stored in the React Context, making it available globally. Any consumer component can retrieve the data using the useDataCollection hook:
-
+# ------------------
 import { useDataCollection } from 'context/DataCollectionContext'; 
 
 function YourComponent() {
-    // This is the array of scraped results, available after fetching is complete.
-    const { geoDataCollection } = useDataCollection(); 
 
+    const { geoDataCollection } = useDataCollection(); 
+    
 }
+# ------------------
