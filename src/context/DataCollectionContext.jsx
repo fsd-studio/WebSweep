@@ -52,9 +52,16 @@ export function DataCollectionProvider({ children }) {
     ]
   );
 
+  const [geoDataCollection, setGeoDataCollection] = useState([]);
+
 
   return (
-    <DataCollectionContext.Provider value={{ companyData, setCompanyData }}>
+    <DataCollectionContext.Provider value={{ 
+      companyData, 
+      setCompanyData,
+      geoDataCollection,
+      setGeoDataCollection 
+    }}>
       {children}
     </DataCollectionContext.Provider>
   );
