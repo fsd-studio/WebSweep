@@ -20,9 +20,9 @@ export default function Home() {
     <>
       <HeadComponent
       />
-      {/*<HTMLValidationModule></HTMLValidationModule>*/}
+      {/* <HTMLValidationModule></HTMLValidationModule> */}
       <DataCollectionModule />
-      <GeoData></GeoData>
+      {/* <GeoData></GeoData> */}
       <GeoMetrics />
     </>
   );

@@ -1,6 +1,7 @@
-import { useMemo, useState, useId, useCallback } from 'react';
-import { useDataCollection } from 'context/DataCollectionContext';
+import { useCallback, useId, useMemo, useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
+import dataset from '/public/data/dataset.json';
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 const normalize = (str = '') =>
   String(str)
@@ -67,34 +68,100 @@ function TypeaheadInput({ id, label, value, onChange, onSelect, source = [] }) {
   );
 }
 
-export default function DataCollectionModule() {
-  const { companyData } = useDataCollection();
+function Pagination({ filtered = [], currentPage, setCurrentPage }) {
+  const limit = 5;
+  const totalPages = Math.ceil(filtered.length / limit);
+  const start = (currentPage - 1) * limit;
+  const currentPosts = filtered.slice(start, start + limit);
 
+  return (
+    <>
+    <div className="mt-6 grid grid-cols-1 gap-4">
+        {currentPosts.length === 0 ? (
+          <div className="text-sm text-gray-500">No results found.</div> 
+        ) : (
+          currentPosts.map((item, idx) => {
+            const key = `${item.website || item.title || 'row'}-${idx}`;
+            const href = item.website ? (/^https?:\/\//i.test(item.website) ? item.website : `https://${item.website}`) : undefined;
+            return (
+              <div key={key} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <div className="text-lg font-semibold capitalize">{item.title || 'Untitled'}</div>
+                    <div className="mt-0.5 text-sm text-gray-600">{item.city || '—'}{item.canton ? `, ${item.canton}` : ''}</div>
+                  </div>
+                  {href && (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-primary hover:underline"
+                    >
+                      Visit site
+                    </a>
+                  )}
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+      <div>
+        <div className='flex items-center mt-6'>
+          <button
+            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+            disabled={currentPage === 1}
+            className='rounded-2xl border flex items-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary/20 justify-center border-gray-200 bg-white px-3 py-2 shadow-sm'
+          >
+            <MdKeyboardArrowLeft className='mt-0.5 me-1'/> Prev 
+          </button>
+          <p style={{ margin: "0 10px" }}>
+            Page {currentPage} of {totalPages}
+          </p>
+          <button
+            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className='rounded-2xl border flex items-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary/20 justify-center border-gray-200 bg-white px-3 py-2 shadow-sm'
+          >
+            Next <MdKeyboardArrowRight  className='mt-0.5 ms-1'/> 
+          </button>
+        </div>
+      </div>
+    </>
+
+  );
+}
+
+export default function DataCollectionModule() {
   const categories = useMemo(
-    () => uniqueFrom((companyData || []).map((c) => c.category)),
-    [companyData]
+    () => uniqueFrom((dataset || []).map((c) => c.category)),
+    []
   );
+
   const citiesAll = useMemo(
-    () => uniqueFrom((companyData || []).map((c) => c.city)),
-    [companyData]
+    () => uniqueFrom((dataset || []).map((c) => c.city)),
+    []
   );
+
   const cantonsAll = useMemo(
-    () => uniqueFrom((companyData || []).map((c) => c.canton)),
-    [companyData]
+    () => uniqueFrom((dataset || []).map((c) => c.canton)),
+    []
   );
+
   const cityToCanton = useMemo(() => {
     const m = new Map();
-    for (const item of companyData || []) {
+    for (const item of dataset || []) {
       if (item?.city && item?.canton) {
         const k = normalize(item.city);
         if (!m.has(k)) m.set(k, item.canton);
       }
     }
     return m;
-  }, [companyData]);
+  }, []);
+
   const cantonToCities = useMemo(() => {
     const m = new Map();
-    for (const item of companyData || []) {
+    for (const item of dataset || []) {
       if (item?.canton && item?.city) {
         const k = normalize(item.canton);
         if (!m.has(k)) m.set(k, new Set());
@@ -104,7 +171,7 @@ export default function DataCollectionModule() {
     const out = new Map();
     for (const [k, set] of m.entries()) out.set(k, Array.from(set));
     return out;
-  }, [companyData]);
+  }, []);
 
   const categoryId = useId();
   const cityId = useId();
@@ -114,6 +181,8 @@ export default function DataCollectionModule() {
   const [city, setCity] = useState('');
   const [canton, setCanton] = useState('');
   const [applied, setApplied] = useState({ category: '', city: '', canton: '' });
+
+  const [currentPage, setCurrentPage] = useState(1);
 
   const cantonSource = useMemo(() => {
     const mapped = city ? cityToCanton.get(normalize(city)) : null;
@@ -149,6 +218,7 @@ export default function DataCollectionModule() {
 
   const handleSearch = useCallback(() => {
     setApplied({ category, city, canton });
+    setCurrentPage(1)
   }, [category, city, canton]);
 
   const handleClear = useCallback(() => {
@@ -162,13 +232,13 @@ export default function DataCollectionModule() {
     const ac = normalize(applied.category || '');
     const aCity = normalize(applied.city || '');
     const aCanton = normalize(applied.canton || '');
-    return (companyData || []).filter((item) => {
+    return (dataset || []).filter((item) => {
       const okCategory = !ac || (item.category && normalize(item.category).includes(ac));
       const okCity = !aCity || (item.city && normalize(item.city).includes(aCity));
       const okCanton = !aCanton || (item.canton && normalize(item.canton).includes(aCanton));
       return okCategory && okCity && okCanton;
     });
-  }, [companyData, applied]);
+  }, [dataset, applied]);
 
   return (
     <section className="w-full max-w-4xl mx-auto">
@@ -238,36 +308,8 @@ export default function DataCollectionModule() {
           {filtered.length}
         </div>
       </div>
-      <div className="mt-6 grid grid-cols-1 gap-4">
-        {filtered.length === 0 ? (
-          <div className="text-sm text-gray-500">No results found.</div> 
-        ) : (
-          filtered.map((item, idx) => {
-            const key = `${item.website || item.title || 'row'}-${idx}`;
-            const href = item.website ? (/^https?:\/\//i.test(item.website) ? item.website : `https://${item.website}`) : undefined;
-            return (
-              <div key={key} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <div className="text-lg font-semibold capitalize">{item.title || 'Untitled'}</div>
-                    <div className="mt-0.5 text-sm text-gray-600">{item.city || '—'}{item.canton ? `, ${item.canton}` : ''}</div>
-                  </div>
-                  {href && (
-                    <a
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-primary hover:underline"
-                    >
-                      Visit site
-                    </a>
-                  )}
-                </div>
-              </div>
-            );
-          })
-        )}
-      </div>
+
+      <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} filtered={filtered}/>
     </section>
   );
 }
