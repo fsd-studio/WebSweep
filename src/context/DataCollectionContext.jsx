@@ -11,7 +11,8 @@ export function DataCollectionProvider({ children }) {
         "email": "info@mmi.ch",
         "geo": "47.3947, 8.5275",
         "city": "Zürich",
-        "canton": "Zürich"
+        "canton": "Zürich",
+        "Category":"Education"
       },
       {
         "title": "pro lumerins",
@@ -20,7 +21,8 @@ export function DataCollectionProvider({ children }) {
         "email": "prolumerins@gmail.com",
         "geo": "46.6824, 9.1443",
         "city": "Lumnezia",
-        "canton": "Graubünden/Grischun/Grigioni"
+        "canton": "Graubünden/Grischun/Grigioni",
+        "Category":"Restaurant \/ Hospitality"
       },
       {
         "title": "evang ref kirchgemeinde ringgenberg",
@@ -29,7 +31,8 @@ export function DataCollectionProvider({ children }) {
         "email": "andreas.schiltknecht@kircheringgenberg.ch",
         "geo": "46.68473, 7.89413",
         "city": "Bönigen",
-        "canton": "Bern/Berne"
+        "canton": "Bern/Berne",
+        "Category":"Non-Profit \/ Charity"
       },
       {
         "title": "sos enfants de chez nous",
@@ -38,7 +41,8 @@ export function DataCollectionProvider({ children }) {
         "email": "info@sosenfantsdecheznous.ch",
         "geo": "46.23224, 7.36284",
         "city": "Sion",
-        "canton": "Valais/Wallis"
+        "canton": "Valais/Wallis",
+        "Category":"Commercial \/ Retail"
       },
       {
         "title": "schweizerische multiple sklerose gesellschaft",
@@ -47,7 +51,8 @@ export function DataCollectionProvider({ children }) {
         "email": null,
         "geo": "47.3893, 8.5294",
         "city": "Zürich",
-        "canton": "Zürich"
+        "canton": "Zürich",
+        "Category":"Education"
       }
     ]
   );

@@ -9,6 +9,15 @@
   overflow: hidden;
 }
 
+body { 
+  background-image: url("/template/background.png"); 
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+  background-attachment: fixed; 
+}
+
+
 
 @theme {
   --color-primary: #15317E;

@@ -32,8 +32,8 @@ function Logo() {
   return (
     <Link href="/">
       <div className="flex items-center">
-        <img src="/template/logo.png" alt="Logo" className="h-10 w-auto" />
-        <span className="font-bold ms-3 text-3xl uppercase font-primary">WebSweep</span>
+        <img src="/template/logo1.png" alt="Logo" className="h-14 md:h-14 w-auto" />
+        <span className="ms-3 text-2xl md:text-3xl uppercase font-Lato font-extrabold tracking-wide">WebSweep</span>
       </div>
     </Link>
   );
