@@ -1,3 +1,5 @@
+"use client"
+
 import { useCallback, useEffect, useId, useMemo, useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import dataset from '/public/data/dataset-websweep.json';
@@ -83,9 +85,8 @@ function Pagination({ filtered = [], currentPage, setCurrentPage }) {
 
       const newPosts = currentPosts.filter(item => !prevIDSet.has(item.id))
 
-      console.log([...prev, ...newPosts])
-
-      return newPosts.length > 0 ? [...prev, ...newPosts] : prev;
+      console.log([...newPosts, ...prev])
+      return newPosts.length > 0 ? [...newPosts, ...prev] : prev;
     })
   }, [filtered, currentPage])
 

@@ -1,4 +1,6 @@
-import { createContext, useState, useContext } from 'react';
+"use client"
+
+import { createContext, useState, useContext, useEffect } from 'react';
 
 const DataCollectionContext = createContext();
 
@@ -56,10 +58,19 @@ export function DataCollectionProvider({ children }) {
       }
     ]
   );
+  const [geoDataCollection, setGeoDataCollection] = useState([]);
 
   const [pipeline, setPipeline] = useState([])
 
-  const [geoDataCollection, setGeoDataCollection] = useState([]);
+  const [Processed, setProcessed] = useState([])
+
+  async function processPipelineItem(item) {
+    // console.log("done!", item)
+  }
+  
+  useEffect(() => {
+    const processed = pipeline.map((item) => processPipelineItem(item));
+  }, [pipeline]);
 
 
   return (
