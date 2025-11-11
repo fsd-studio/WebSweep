@@ -1,7 +1,8 @@
-import { useCallback, useId, useMemo, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
-import dataset from '/public/data/dataset.json';
+import dataset from '/public/data/dataset-websweep.json';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import { useDataCollection } from 'context/DataCollectionContext';
 
 const normalize = (str = '') =>
   String(str)
@@ -69,10 +70,24 @@ function TypeaheadInput({ id, label, value, onChange, onSelect, source = [] }) {
 }
 
 function Pagination({ filtered = [], currentPage, setCurrentPage }) {
+  const { setPipeline } = useDataCollection()
+
   const limit = 5;
   const totalPages = Math.ceil(filtered.length / limit);
   const start = (currentPage - 1) * limit;
   const currentPosts = filtered.slice(start, start + limit);
+  
+  useEffect(() => {
+    setPipeline((prev) => {
+      const prevIDSet = new Set(prev.map(item => item.id));
+
+      const newPosts = currentPosts.filter(item => !prevIDSet.has(item.id))
+
+      console.log([...prev, ...newPosts])
+
+      return newPosts.length > 0 ? [...prev, ...newPosts] : prev;
+    })
+  }, [filtered, currentPage])
 
   return (
     <>
@@ -122,17 +137,19 @@ function Pagination({ filtered = [], currentPage, setCurrentPage }) {
             onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
             disabled={currentPage === totalPages}
             className='rounded-2xl border flex items-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary/20 justify-center border-gray-200 bg-white px-3 py-2 shadow-sm'
-          >
+            >
             Next <MdKeyboardArrowRight  className='mt-0.5 ms-1'/> 
           </button>
         </div>
       </div>
     </>
 
-  );
+);
 }
 
 export default function DataCollectionModule() {
+  const { setPipeline } = useDataCollection()
+
   const categories = useMemo(
     () => uniqueFrom((dataset || []).map((c) => c.category)),
     []
@@ -183,6 +200,7 @@ export default function DataCollectionModule() {
   const [applied, setApplied] = useState({ category: '', city: '', canton: '' });
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [filtered, setFiltered] = useState([]);
 
   const cantonSource = useMemo(() => {
     const mapped = city ? cityToCanton.get(normalize(city)) : null;
@@ -217,28 +235,32 @@ export default function DataCollectionModule() {
   );
 
   const handleSearch = useCallback(() => {
-    setApplied({ category, city, canton });
-    setCurrentPage(1)
-  }, [category, city, canton]);
+  const ac = normalize(category || '');
+  const aCity = normalize(city || '');
+  const aCanton = normalize(canton || '');
+
+  setApplied({ category, city, canton });
+  setPipeline([]);
+  setCurrentPage(1);
+
+  setFiltered(
+    (dataset || []).filter((item) => {
+      const okCategory = !ac || (item.category && normalize(item.category).includes(ac));
+      const okCity = !aCity || (item.city && normalize(item.city).includes(aCity));
+      const okCanton = !aCanton || (item.canton && normalize(item.canton).includes(aCanton));
+      return okCategory && okCity && okCanton;
+    }));
+  }, [category, city, canton, dataset]);
+
 
   const handleClear = useCallback(() => {
+    setPipeline([])
+    setFiltered([])
     setCategory('');
     setCity('');
     setCanton('');
     setApplied({ category: '', city: '', canton: '' });
   }, []);
-
-  const filtered = useMemo(() => {
-    const ac = normalize(applied.category || '');
-    const aCity = normalize(applied.city || '');
-    const aCanton = normalize(applied.canton || '');
-    return (dataset || []).filter((item) => {
-      const okCategory = !ac || (item.category && normalize(item.category).includes(ac));
-      const okCity = !aCity || (item.city && normalize(item.city).includes(aCity));
-      const okCanton = !aCanton || (item.canton && normalize(item.canton).includes(aCanton));
-      return okCategory && okCity && okCanton;
-    });
-  }, [dataset, applied]);
 
   return (
     <section className="w-full max-w-4xl mx-auto">

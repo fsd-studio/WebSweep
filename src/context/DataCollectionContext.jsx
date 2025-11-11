@@ -57,6 +57,8 @@ export function DataCollectionProvider({ children }) {
     ]
   );
 
+  const [pipeline, setPipeline] = useState([])
+
   const [geoDataCollection, setGeoDataCollection] = useState([]);
 
 
@@ -64,6 +66,8 @@ export function DataCollectionProvider({ children }) {
     <DataCollectionContext.Provider value={{ 
       companyData, 
       setCompanyData,
+      pipeline, 
+      setPipeline,
       geoDataCollection,
       setGeoDataCollection 
     }}>
