@@ -58,29 +58,32 @@ export function DataCollectionProvider({ children }) {
       }
     ]
   );
+
+  const [computedData, setComputedData] = useState({
+    1: {geo: {score: 44}, seo: {score: 44}, performance: {score: 44}}
+  });
+
+  const updateScore = (id, type, scoreObj) => {
+    setComputedData(prev => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        [type]: scoreObj,
+      },
+    }));
+  };
+
   const [geoDataCollection, setGeoDataCollection] = useState([]);
-
-  const [pipeline, setPipeline] = useState([])
-
-  const [Processed, setProcessed] = useState([])
-
-  async function processPipelineItem(item) {
-    // console.log("done!", item)
-  }
-  
-  useEffect(() => {
-    const processed = pipeline.map((item) => processPipelineItem(item));
-  }, [pipeline]);
-
 
   return (
     <DataCollectionContext.Provider value={{ 
       companyData, 
       setCompanyData,
-      pipeline, 
-      setPipeline,
       geoDataCollection,
-      setGeoDataCollection 
+      setGeoDataCollection,
+      computedData,
+      setComputedData,
+      updateScore
     }}>
       {children}
     </DataCollectionContext.Provider>
