@@ -1,4 +1,6 @@
-import { createContext, useState, useContext } from 'react';
+"use client"
+
+import { createContext, useState, useContext, useEffect } from 'react';
 
 const DataCollectionContext = createContext();
 
@@ -57,19 +59,31 @@ export function DataCollectionProvider({ children }) {
     ]
   );
 
-  const [pipeline, setPipeline] = useState([])
+  const [computedData, setComputedData] = useState({
+    1: {geo: {score: 44}, seo: {score: 44}, performance: {score: 44}}
+  });
+
+  const updateScore = (id, type, scoreObj) => {
+    setComputedData(prev => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        [type]: scoreObj,
+      },
+    }));
+  };
 
   const [geoDataCollection, setGeoDataCollection] = useState([]);
-
 
   return (
     <DataCollectionContext.Provider value={{ 
       companyData, 
       setCompanyData,
-      pipeline, 
-      setPipeline,
       geoDataCollection,
-      setGeoDataCollection 
+      setGeoDataCollection,
+      computedData,
+      setComputedData,
+      updateScore
     }}>
       {children}
     </DataCollectionContext.Provider>

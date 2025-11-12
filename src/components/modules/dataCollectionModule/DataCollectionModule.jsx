@@ -1,8 +1,11 @@
-import { useCallback, useEffect, useId, useMemo, useState } from 'react';
+"use client"
+
+import { Suspense, useCallback, useEffect, useId, useMemo, useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import dataset from '/public/data/dataset-websweep.json';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { useDataCollection } from 'context/DataCollectionContext';
+import ListItem from './ListItem';
 
 const normalize = (str = '') =>
   String(str)
@@ -70,56 +73,35 @@ function TypeaheadInput({ id, label, value, onChange, onSelect, source = [] }) {
 }
 
 function Pagination({ filtered = [], currentPage, setCurrentPage }) {
-  const { setPipeline } = useDataCollection()
-
   const limit = 5;
   const totalPages = Math.ceil(filtered.length / limit);
   const start = (currentPage - 1) * limit;
   const currentPosts = filtered.slice(start, start + limit);
-  
-  useEffect(() => {
-    setPipeline((prev) => {
-      const prevIDSet = new Set(prev.map(item => item.id));
-
-      const newPosts = currentPosts.filter(item => !prevIDSet.has(item.id))
-
-      console.log([...prev, ...newPosts])
-
-      return newPosts.length > 0 ? [...prev, ...newPosts] : prev;
-    })
-  }, [filtered, currentPage])
 
   return (
     <>
     <div className="mt-6 grid grid-cols-1 gap-4">
-        {currentPosts.length === 0 ? (
-          <div className="text-sm text-gray-500">No results found.</div> 
-        ) : (
-          currentPosts.map((item, idx) => {
-            const key = `${item.website || item.title || 'row'}-${idx}`;
-            const href = item.website ? (/^https?:\/\//i.test(item.website) ? item.website : `https://${item.website}`) : undefined;
-            return (
-              <div key={key} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <div className="text-lg font-semibold capitalize">{item.title || 'Untitled'}</div>
-                    <div className="mt-0.5 text-sm text-gray-600">{item.city || '—'}{item.canton ? `, ${item.canton}` : ''}</div>
-                  </div>
-                  {href && (
-                    <a
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-primary hover:underline"
-                    >
-                      Visit site
-                    </a>
-                  )}
-                </div>
-              </div>
-            );
-          })
-        )}
+      <div className='flex justify-between font-semibold'>
+        <div className='w-80 ms-4'>Title</div>
+
+        <div className='flex font-normal'>
+          <div className='w-20'>Geo</div>
+          <div className='w-20'>Seo</div>
+          <div className='w-20'>Performance</div>
+        </div>
+
+        <div className='me-11.5'>site</div>
+      </div>
+      {currentPosts.length === 0 ? (
+        <div className="text-sm text-gray-500">No results found.</div> 
+      ) : (
+        currentPosts.map((item) => {
+          const href = item.website ? (/^https?:\/\//i.test(item.website) ? item.website : `https://${item.website}`) : undefined;
+          return (
+              <ListItem key={item.id} href={href} item={item}/>
+          );
+        })
+      )}
       </div>
       <div>
         <div className='flex items-center mt-6'>
@@ -148,7 +130,6 @@ function Pagination({ filtered = [], currentPage, setCurrentPage }) {
 }
 
 export default function DataCollectionModule() {
-  const { setPipeline } = useDataCollection()
 
   const categories = useMemo(
     () => uniqueFrom((dataset || []).map((c) => c.category)),
@@ -240,7 +221,6 @@ export default function DataCollectionModule() {
   const aCanton = normalize(canton || '');
 
   setApplied({ category, city, canton });
-  setPipeline([]);
   setCurrentPage(1);
 
   setFiltered(
@@ -254,7 +234,6 @@ export default function DataCollectionModule() {
 
 
   const handleClear = useCallback(() => {
-    setPipeline([])
     setFiltered([])
     setCategory('');
     setCity('');
