@@ -79,7 +79,7 @@ def scrape_url_for_api(url):
                 "text": f"Connection Error fetching page: {e}",
             }
     
-    else:
+    else: # Executed if the loop completes without a successful break (i.e., all retries failed)
         return {
             "title": "FETCH_ERROR",
             "text": "All retry attempts failed due to persistent server issues.",
@@ -99,43 +99,37 @@ def scrape_url_for_api(url):
     }
 
 
-# --- The Flask Route ---
-@app.route('/api/scrape', methods=['POST'])
-def scrape_data():
-    data = request.json
+# --- The Flask Route (New Single-Item Endpoint) ---
+@app.route('/api/scrape_single', methods=['POST'])
+def scrape_single_data():
+    # Expects a single company object from the React component
+    data = request.json 
     
-    if data is None or not isinstance(data, list):
-        return jsonify({"error": "Invalid JSON body or missing content type header. Expected a list."}), 400
+    if data is None or not isinstance(data, dict):
+        return jsonify({"error": "Invalid JSON body. Expected a single company object."}), 400
 
-    company_data_list = data
-    scraped_results = []
-
-    for company_object in company_data_list:
-        url = company_object.get('website')
+    company_object = data
+    url = company_object.get('website')
+    
+    if not url:
+        scraped_data = {"title": "MISSING_URL", "text": "Website URL was missing."}
+    else:
+        print(f"Attempting to scrape single URL: {url}")
+        scraped_data = scrape_url_for_api(url)
         
-        # Ensure scraped_data is assigned in all logical branches
-        if not url:
-            # Case 1: URL is missing
-            scraped_data = {"title": "MISSING_URL", "text": "Website URL was missing in the input data."}
-        else:
-            # Case 2: URL is present, perform scraping
-            print(f"Attempting to scrape URL: {url}")
-            scraped_data = scrape_url_for_api(url)
-            
-        # Prepare the final structured result for this company
-        result = {
-            "url": url,
-            "title": scraped_data.get('title', 'N/A'),
-            # Truncate text (or keep the full text if required)
-            "text": scraped_data.get('text', 'N/A')[:500] + '...' if len(scraped_data.get('text', '')) > 500 else scraped_data.get('text', 'N/A'),
-            "tags": [company_object.get('city', 'N/A'), company_object.get('canton', 'N/A')] # Desired position 4
-        }
-        scraped_results.append(result)
-
-    # Use manual serialization (json.dumps) to guarantee the key order
-    json_output = json.dumps(scraped_results, indent=2)
-    return Response(json_output, mimetype='application/json')
+    # Prepare the final structured result for this company
+    result = {
+        "url": url,
+        "title": scraped_data.get('title', 'N/A'),
+        # Truncate text (or keep the full text if required)
+        "text": scraped_data.get('text', 'N/A')[:500] + '...' if len(scraped_data.get('text', '')) > 500 else scraped_data.get('text', 'N/A'),
+        "tags": [company_object.get('city', 'N/A'), company_object.get('canton', 'N/A')]
+    }
+    
+    # Return the single result object as JSON
+    return jsonify(result)
 
 if __name__ == '__main__':
     print("Starting Flask Scraper API on http://localhost:5000")
+    # Use debug=True for development, but remove for production
     app.run(port=5000)
