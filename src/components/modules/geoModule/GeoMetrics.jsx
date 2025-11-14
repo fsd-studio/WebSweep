@@ -60,6 +60,7 @@ export default function GeoMetrics() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify([payload[i]]),
           });
+          
           const json = await resp.json();
           const r = json?.items?.[0] || { url: payload[i].url, success: false, error: json?.error || `HTTP ${resp.status}` };
           if (!cancelled) {

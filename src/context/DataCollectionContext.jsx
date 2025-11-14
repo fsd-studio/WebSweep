@@ -69,19 +69,31 @@ export function DataCollectionProvider({ children }) {
     ]
   );
 
-  const [computedData, setComputedData] = useState({
-    1: {geo: {score: 44}, seo: {score: 44}, performance: {score: 44}}
-  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [category, setCategory] = useState('');
+  const [canton, setCanton] = useState('');
+  const [city, setCity] = useState('');
 
-  const updateScore = (id, type, scoreObj) => {
+  const [computedData, setComputedData] = useState({});
+
+  const updateData = (id, strategy, category, resultObj) => {
     setComputedData(prev => ({
       ...prev,
       [id]: {
         ...prev[id],
-        [type]: scoreObj,
+        [strategy]: {
+          ...(prev[id]?.[strategy] || {}),
+          [category]: resultObj,
+        },
       },
     }));
+
+
   };
+
+  useEffect(() => {
+  console.log("computedData changed:", computedData);
+}, [computedData]); 
 
   const [geoDataCollection, setGeoDataCollection] = useState([]);
 
@@ -95,9 +107,17 @@ export function DataCollectionProvider({ children }) {
       setGeoDataCollection,
       computedData,
       setComputedData,
-      updateScore,
-      HTMLValidationResults, 
-      setHTMLValidationResults
+      updateData,
+      
+      currentPage, 
+      setCurrentPage,
+      category, 
+      setCategory,
+      canton, 
+      setCanton,
+      city, 
+      setCity,
+
     }}>
       {children}
     </DataCollectionContext.Provider>

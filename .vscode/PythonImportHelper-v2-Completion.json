@@ -126,6 +126,15 @@
         "documentation": {}
     },
     {
+        "label": "scrape_single_data",
+        "kind": 2,
+        "importPath": "backend.geo_scraper",
+        "description": "backend.geo_scraper",
+        "peekOfCode": "def scrape_single_data():\n    # Expects a single company object from the React component\n    data = request.json \n    if data is None or not isinstance(data, dict):\n        return jsonify({\"error\": \"Invalid JSON body. Expected a single company object.\"}), 400\n    company_object = data\n    url = company_object.get('website')\n    if not url:\n        scraped_data = {\"title\": \"MISSING_URL\", \"text\": \"Website URL was missing.\"}\n    else:",
+        "detail": "backend.geo_scraper",
+        "documentation": {}
+    },
+    {
         "label": "scrape_data",
         "kind": 2,
         "importPath": "backend.geo_scraper",

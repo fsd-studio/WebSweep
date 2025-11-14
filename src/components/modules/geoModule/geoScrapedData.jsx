@@ -1,5 +1,8 @@
+"use client"
+
 import React, { useState, useEffect } from "react";
 import { useDataCollection } from "context/DataCollectionContext"; 
+
 
 // Update the API URL to the new single-scrape endpoint
 const SCRAPER_API_URL = "http://localhost:5000/api/scrape_single";

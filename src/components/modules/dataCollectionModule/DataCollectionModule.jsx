@@ -175,12 +175,19 @@ export default function DataCollectionModule() {
   const cityId = useId();
   const cantonId = useId();
 
-  const [category, setCategory] = useState('');
-  const [city, setCity] = useState('');
-  const [canton, setCanton] = useState('');
-  const [applied, setApplied] = useState({ category: '', city: '', canton: '' });
+  const { 
+    category, 
+    setCategory, 
+    canton, 
+    setCanton, 
+    city, 
+    setCity, 
+    currentPage, 
+    setCurrentPage 
+  } = useDataCollection();
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [applied, setApplied] = useState({ category: '', city: '', canton: '' });
+  
   const [filtered, setFiltered] = useState([]);
 
   const cantonSource = useMemo(() => {
