@@ -1,8 +1,10 @@
+"use client"
+
 import React, { useState, useEffect } from "react";
 import { useDataCollection } from "context/DataCollectionContext"; 
 
 // Define the URL of your Python Flask server
-const SCRAPER_API_URL = "http://localhost:5000/api/scrape";
+const SCRAPER_API_URL = "http://localhost:5001/api/scrape";
 
 
 // Component to fetch geo-tagged data and save the result to Context.

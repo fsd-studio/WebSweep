@@ -135,6 +135,15 @@
         "documentation": {}
     },
     {
+        "label": "scrape_data",
+        "kind": 2,
+        "importPath": "backend.geo_scraper",
+        "description": "backend.geo_scraper",
+        "peekOfCode": "def scrape_data():\n    data = request.json\n    if data is None or not isinstance(data, list):\n        return jsonify({\"error\": \"Invalid JSON body or missing content type header. Expected a list.\"}), 400\n    company_data_list = data\n    scraped_results = []\n    for company_object in company_data_list:\n        url = company_object.get('website')\n        # Ensure scraped_data is assigned in all logical branches\n        if not url:",
+        "detail": "backend.geo_scraper",
+        "documentation": {}
+    },
+    {
         "label": "USER_AGENT",
         "kind": 5,
         "importPath": "backend.geo_scraper",
