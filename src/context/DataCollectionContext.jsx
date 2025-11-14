@@ -55,7 +55,17 @@ export function DataCollectionProvider({ children }) {
         "city": "Zürich",
         "canton": "Zürich",
         "Category":"Education"
-      }
+      },
+      {
+          "Title":"alzheimer schweiz",
+          "Website":"www.alzheimer-schweiz.ch",
+          "Phone":null,
+          "Email":null,
+          "geo": "47.3893, 8.5297",
+          "City":"Bern",
+          "Canton":"Bern\/Berne",
+          "Category":"Restaurant \/ Hospitality"
+        },
     ]
   );
 
@@ -87,6 +97,8 @@ export function DataCollectionProvider({ children }) {
 
   const [geoDataCollection, setGeoDataCollection] = useState([]);
 
+  const [HTMLValidationResults, setHTMLValidationResults] = useState([]);
+
   return (
     <DataCollectionContext.Provider value={{ 
       companyData, 
@@ -105,6 +117,7 @@ export function DataCollectionProvider({ children }) {
       setCanton,
       city, 
       setCity,
+
     }}>
       {children}
     </DataCollectionContext.Provider>
