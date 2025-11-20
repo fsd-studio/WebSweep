@@ -5,7 +5,7 @@ import { useDataCollection } from "context/DataCollectionContext";
 
 
 // Update the API URL to the new single-scrape endpoint
-const SCRAPER_API_URL = "http://localhost:5000/api/scrape_single";
+const SCRAPER_API_URL = "http://localhost:5001/api/scrape_single";
 
 // Utility function to introduce a delay for sequential processing
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));

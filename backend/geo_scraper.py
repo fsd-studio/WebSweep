@@ -166,6 +166,6 @@ def scrape_data():
     return Response(json_output, mimetype='application/json')
 
 if __name__ == '__main__':
-    print("Starting Flask Scraper API on http://localhost:5000")
+    print("Starting Flask Scraper API on http://localhost:5001")
     # Use debug=True for development, but remove for production
-    app.run(port=5000)
+    app.run(port=5001)
