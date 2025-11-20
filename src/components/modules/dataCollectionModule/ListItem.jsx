@@ -3,6 +3,7 @@ import Loading from "./Loading";
 import ScoreRing from "./ScoreRing";
 import { useDataCollection } from "context/DataCollectionContext";
 import { geoMetrics } from "lib/geo/geoMetrics";
+import Link from "next/link";
 
 const SCRAPER_API_URL = "http://localhost:5001/api/scrape";
 
@@ -75,17 +76,16 @@ function ListItem({ item, href}) {
 
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-        const result = await response.json();
+        const result = await response.json()
+
+        console.log("result", result);
+        
         return result.success ? result.data.MOBILE.SEO : { score: null, audits: {} };
       } catch (error) {
         console.error("Error fetching SEO:", error);
         return { score: null, audits: {}, error: error.message };
       }
     }
-
-
-
-
 
     useEffect(() => {
         if (computedData[item.id]) return;
@@ -111,6 +111,7 @@ function ListItem({ item, href}) {
     , [])
   
     return (
+      <Link href={`/item/${item.id}`}>
         <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
             <div className="flex items-start justify-between gap-3">
                 <div>
@@ -136,7 +137,7 @@ function ListItem({ item, href}) {
                 </div>
 
 
-                {href && (
+                {/* {href && (
                 <a
                     href={href}
                     target="_blank"
@@ -145,9 +146,10 @@ function ListItem({ item, href}) {
                 >
                     Visit site
                 </a>
-                )}
+                )} */}
             </div>
         </div>
+      </Link>
     );
 }
 
