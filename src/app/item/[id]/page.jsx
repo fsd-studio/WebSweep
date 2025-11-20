@@ -6,6 +6,8 @@ import LeftPanel from './LeftPanel'
  
 export default function BlogPostPage({ params }) {
   const { id } = use(params)
+
+  
  
   return (
     <div className='flex gap-3 h-full'>
