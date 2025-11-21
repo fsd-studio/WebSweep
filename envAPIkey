@@ -1,3 +1,6 @@
-TOGETHER_API_KEY="API Key here"
-GEO_EXTRACT_MODEL=mistralai/Mixtral-8x7B-Instruct-v0.1    
-GEO_EVAL_MODEL=meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
+TOGETHER_API_KEY="8748f693c0fc16da29eb2ba7b920088222a1eef1fa23af5fe63e1731a725ede0"
+GEO_EXTRACT_MODEL= "mistralai/Mixtral-8x7B-Instruct-v0.1"
+GEO_EVAL_MODEL="meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo"
+# set a *different* eval model to reduce self-eval bias later
+# GEO_EVAL_MODEL=meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo
+PAGESPEED_API_KEY="AIzaSyBl5b9EZkMiUgVlUpLoSSjwOUdoolwo7tY"
