@@ -127,12 +127,10 @@ export default function DataCollectionModule() {
     city, 
     setCity, 
     currentPage, 
-    setCurrentPage 
+    setCurrentPage,
+    searchApplied,
+    setSearchApplied,
   } = useDataCollection();
-
-  const [applied, setApplied] = useState({ category: '', city: '', canton: '' });
-  
-  const [filtered, setFiltered] = useState([]);
 
   const cantonSource = useMemo(() => {
     const mapped = city ? cityToCanton.get(normalize(city)) : null;
@@ -166,31 +164,32 @@ export default function DataCollectionModule() {
     [city, cityToCanton]
   );
 
-  const handleSearch = useCallback(() => {
-  const ac = normalize(category || '');
-  const aCity = normalize(city || '');
-  const aCanton = normalize(canton || '');
-
-  setApplied({ category, city, canton });
-  setCurrentPage(1);
-
-  setFiltered(
-    (dataset || []).filter((item) => {
+  const filtered = useMemo(() => {
+    if (!searchApplied) return [];
+    const ac = normalize(searchApplied.category || '');
+    const aCity = normalize(searchApplied.city || '');
+    const aCanton = normalize(searchApplied.canton || '');
+    return (dataset || []).filter((item) => {
       const okCategory = !ac || (item.category && normalize(item.category).includes(ac));
       const okCity = !aCity || (item.city && normalize(item.city).includes(aCity));
       const okCanton = !aCanton || (item.canton && normalize(item.canton).includes(aCanton));
       return okCategory && okCity && okCanton;
-    }));
-  }, [category, city, canton, dataset]);
+    });
+  }, [searchApplied, dataset]);
+
+  const handleSearch = useCallback(() => {
+    setSearchApplied({ category, city, canton });
+    setCurrentPage(1);
+  }, [category, city, canton, setSearchApplied, setCurrentPage]);
 
 
   const handleClear = useCallback(() => {
-    setFiltered([])
     setCategory('');
     setCity('');
     setCanton('');
-    setApplied({ category: '', city: '', canton: '' });
-  }, []);
+    setSearchApplied(null);
+    setCurrentPage(1);
+  }, [setCategory, setCity, setCanton, setSearchApplied, setCurrentPage]);
 
   return (
     <section className="w-full max-w-4xl mx-auto">
