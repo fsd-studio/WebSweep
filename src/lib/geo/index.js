@@ -3,7 +3,12 @@ import { togetherClientFactory } from "./adapters/llm";
 import { regexChecks as regexChecksVendored } from "./metrics/regexChecks";
 import { extractStructured } from "./extract";
 import { positionAdjustedWordCount } from "./metrics/positionMetric";
-import { evidenceCoverage, fieldCompleteness, evidenceLiteralMatchRate, avgEvidenceSpanChars } from "./metrics/evidenceMetrics";
+import {
+  evidenceCoverage,
+  fieldCompleteness,
+  evidenceLiteralMatchRate,
+  avgEvidenceSpanChars,
+} from "./metrics/evidenceMetrics";
 import { sourceEntropy } from "./metrics/sourceDiversity";
 import { typeTokenRatio } from "./metrics/textStats";
 
@@ -11,7 +16,11 @@ function normalizeUrl(input) {
   if (!input || typeof input !== "string") return null;
   let u = input.trim();
   if (!/^https?:\/\//i.test(u)) u = "https://" + u;
-  try { return new URL(u).toString(); } catch { return null; }
+  try {
+    return new URL(u).toString();
+  } catch {
+    return null;
+  }
 }
 
 function htmlToText(html) {
@@ -34,18 +43,31 @@ async function fetchPageText(url) {
     const resp = await fetch(url, { headers: { "User-Agent": "WebSweep-GEO/1.0" } });
     const html = await resp.text();
     return htmlToText(html).slice(0, 20000);
-  } catch (e) { return ""; }
+  } catch {
+    return "";
+  }
 }
 
-function sleep(ms) { return new Promise((r) => setTimeout(r, ms)); }
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 export async function runGeo(items, opts = {}) {
-  const { apiKey = process.env.TOGETHER_API_KEY, extractModel = process.env.GEO_EXTRACT_MODEL || "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo", evalModel = process.env.GEO_EVAL_MODEL || "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo", qpm = Number(process.env.GEO_QPM || 5), retries = Number(process.env.GEO_RETRIES || 2), maxTextChars = Number(process.env.GEO_MAX_TEXT_CHARS || 8000), mode = (process.env.GEO_MODE || "full").toLowerCase() } = opts;
+  const {
+    apiKey = process.env.TOGETHER_API_KEY,
+    extractModel = process.env.GEO_EXTRACT_MODEL || "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo",
+    evalModel = process.env.GEO_EVAL_MODEL || "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo",
+    qpm = Number(process.env.GEO_QPM || 5),
+    retries = Number(process.env.GEO_RETRIES || 2),
+    maxTextChars = Number(process.env.GEO_MAX_TEXT_CHARS || 8000),
+    mode = (process.env.GEO_MODE || "full").toLowerCase(),
+  } = opts;
 
   const results = [];
 
   const haveLLM = !!apiKey;
   let processor = null;
+
   if (haveLLM) {
     const baseChat = togetherClientFactory(apiKey);
     const minInterval = Math.max(0, Math.floor(60000 / Math.max(1, qpm)));
@@ -55,6 +77,7 @@ export async function runGeo(items, opts = {}) {
       const now = Date.now();
       const elapsed = now - last;
       if (elapsed < minInterval) await sleep(minInterval - elapsed);
+
       for (let attempt = 0; attempt <= retries; attempt++) {
         try {
           const out = await baseChat(args);
@@ -100,11 +123,23 @@ export async function runGeo(items, opts = {}) {
           text,
           title: item?.title || undefined,
           tags: Array.isArray(item?.tags) ? item.tags : undefined,
-          domain: (() => { try { return new URL(url).hostname; } catch { return undefined; } })(),
+          domain: (() => {
+            try {
+              return new URL(url).hostname;
+            } catch {
+              return undefined;
+            }
+          })(),
         };
+
         if (mode === "extract-only") {
           // Only extraction + objective diagnostics (no LLM evaluation)
-          const extraction = await extractStructured(page, processor.chat ?? togetherClientFactory(apiKey), extractModel, 0.2);
+          const extraction = await extractStructured(
+            page,
+            processor.chat ?? togetherClientFactory(apiKey),
+            extractModel,
+            0.2
+          );
 
           const addrBlob = extraction.address
             ? [
@@ -135,7 +170,15 @@ export async function runGeo(items, opts = {}) {
           const ttr = typeTokenRatio(page.text);
           const diversity = sourceEntropy(bySource);
 
-          const diagnostics = { completeness: comp, evidenceCoverage: cov, evidenceLiteral: lit, evidenceAvgSpanChars: evLen, ttr, diversity };
+          const diagnostics = {
+            completeness: comp,
+            evidenceCoverage: cov,
+            evidenceLiteral: lit,
+            evidenceAvgSpanChars: evLen,
+            ttr,
+            diversity,
+          };
+
           const objective = {
             schema_ok: true,
             address_regex_match: rc.address_regex_match,
@@ -145,7 +188,17 @@ export async function runGeo(items, opts = {}) {
             position_adjusted_wc_by_source: bySource,
           };
 
-          results.push({ url, success: true, data: { page, extraction, objective, diagnostics, note: "GEO_MODE=extract-only (no LLM evaluation)" } });
+          results.push({
+            url,
+            success: true,
+            data: {
+              page,
+              extraction,
+              objective,
+              diagnostics,
+              note: "GEO_MODE=extract-only (no LLM evaluation)",
+            },
+          });
         } else {
           const geoRes = await processor.process(page);
           results.push({ url, success: true, data: geoRes });
@@ -157,26 +210,45 @@ export async function runGeo(items, opts = {}) {
       // Objective-only fallback
       const email = item?.email ?? null;
       const phone = item?.phone ?? null;
-      const addrBlob = [item?.street, item?.postal_code, item?.city, item?.canton, item?.country, item?.address]
+      const addrBlob = [
+        item?.street,
+        item?.postal_code,
+        item?.city,
+        item?.canton,
+        item?.country,
+        item?.address,
+      ]
         .filter(Boolean)
         .join(" ");
 
       const rc = regexChecksVendored(text || "", email, phone, addrBlob);
-      const checks = [rc.email_regex_match, rc.phone_regex_match, rc.address_regex_match].filter((v) => typeof v === "boolean");
-      const objectiveScore = checks.length ? Math.round((checks.reduce((a, b) => a + (b ? 1 : 0), 0) / checks.length) * 100) : 0;
+      const checks = [rc.email_regex_match, rc.phone_regex_match, rc.address_regex_match].filter(
+        (v) => typeof v === "boolean"
+      );
+      const objectiveScore = checks.length
+        ? Math.round((checks.reduce((a, b) => a + (b ? 1 : 0), 0) / checks.length) * 100)
+        : 0;
+
       let reason = !haveLLM ? "TOGETHER_API_KEY not configured" : "GEO processor unavailable";
       if (mode === "objective-only") reason = "GEO_MODE=objective-only";
+
       results.push({
         url,
         success: true,
         data: {
-          page: { url, text: (text || "").slice(0, 200) + (text?.length > 200 ? "…" : "") },
+          page: {
+            url,
+            text: (text || "").slice(0, 200) + (text?.length > 200 ? "…" : ""),
+          },
           objective: rc,
           objective_score: objectiveScore,
           note: `${reason}: returning objective regex checks only.`,
         },
       });
+    }
   }
+
+  return results;
 }
 
 function synthesizeGEAnswer(page, ex) {
@@ -185,13 +257,14 @@ function synthesizeGEAnswer(page, ex) {
   if (ex.goal?.value) out.push(`Goal: ${ex.goal.value} [SOURCE: ${src}]`);
   if (ex.vision?.value) out.push(`Vision: ${ex.vision.value} [SOURCE: ${src}]`);
   if (ex.mission?.value) out.push(`Mission: ${ex.mission.value} [SOURCE: ${src}]`);
-  if (ex.services?.length)
+  if (ex.services?.length) {
     out.push(
       `Services include ${ex.services
         .map((s) => s.value)
         .filter(Boolean)
         .join(", ")}. [SOURCE: ${src}]`
     );
+  }
   if (ex.address) {
     const a = ex.address;
     const addr = [a.street?.value, a.postal_code?.value, a.city?.value, a.country?.value]
@@ -206,9 +279,6 @@ function synthesizeGEAnswer(page, ex) {
   }
   if (!out.length) out.push(`No structured fields extracted. [SOURCE: ${src}]`);
   return out.join(" ");
-}
-
-  return results;
 }
 
 export default runGeo;
