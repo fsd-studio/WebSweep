@@ -13,13 +13,12 @@ export default function Pagination({ filtered = [], currentPage, setCurrentPage 
       <div className='flex justify-between font-semibold'>
         <div className='w-80 ms-4'>Title</div>
 
-        <div className='flex font-normal'>
+        <div className='flex font-normal me-15.5'>
           <div className='w-20'>Geo</div>
           <div className='w-20'>Seo</div>
           <div className='w-20'>Performance</div>
         </div>
 
-        <div className='me-11.5'>site</div>
       </div>
       {currentPosts.length === 0 ? (
         <div className="text-sm text-gray-500">No results found.</div> 

@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import GeoSummary from "./evaluations/GeoSummary";
+import PerformanceSummary from "./evaluations/PerformanceSummary";
+import SeoSummary from "./evaluations/SeoSummary";
 import Panel from "./Panel";
+import React, { useState } from "react";
 
 function LeftPanel({ item, geo }) {
   const tabs = ["Overview", "GEO", "SEO", "Performance"];
@@ -159,11 +162,16 @@ function LeftPanel({ item, geo }) {
         <div className="pt-2 flex-grow overflow-y-auto">
           {renderContent()}
         </div>
+        <GeoSummary item={item} geo={geo}></GeoSummary>
+        <SeoSummary seo={seo}></SeoSummary>
+        <PerformanceSummary></PerformanceSummary>
       </div>
     </Panel>
   );
 }
 
+
+export default LeftPanel;
 
 function SummaryMetric({ label, value, description }) {
   return (
@@ -225,4 +233,4 @@ function metricDescription(id) {
   }
 }
 
-export default LeftPanel;
+
