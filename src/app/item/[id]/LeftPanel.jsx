@@ -1,17 +1,18 @@
+import { useRouter } from "next/navigation";
 import GeoSummary from "./evaluations/GeoSummary";
 import PerformanceSummary from "./evaluations/PerformanceSummary";
 import SeoSummary from "./evaluations/SeoSummary";
 import Panel from "./Panel";
 import React, { useState } from "react";
 
-function LeftPanel({ item, geo }) {
+function LeftPanel({ item, geo, seo }) {
   const tabs = ["Overview", "GEO", "SEO", "Performance"];
   const [activeTab, setActiveTab] = useState("Overview");
   
   const website = normalizeUrl(item?.website);
 
+  const router = useRouter();
 
-  // Function to render content based on the active tab
   const renderContent = () => {
     switch (activeTab) {
       case "Overview":
@@ -58,39 +59,11 @@ function LeftPanel({ item, geo }) {
               </div>
             </div>
             
-            {/* GEO Summary */}
+            {/* Summaries */}
             <div className="space-y-2">
-              <div className="text-xs font-semibold uppercase tracking-wide text-gray-500">GEO summary</div>
-              {geo ? (
-                <div className="grid grid-cols-2 gap-3 max-w-md">
-                  {geo.evaluation?.overall?.score !== undefined && (
-                    <SummaryMetric
-                      label="LLM overall"
-                      value={geo.evaluation.overall.score}
-                      description={metricDescription("llm_overall")}
-                    />
-                  )}
-
-                  {geo.evaluation?.scores &&
-                    Object.entries(geo.evaluation.scores).map(([key, val]) => {
-                      if (val?.score === undefined || val.score === null) return null;
-                      return (
-                        <SummaryMetric
-                          key={key}
-                          label={titleCase(key)}
-                          value={val.score}
-                          description={metricDescription(key)}
-                        />
-                      );
-                    })}
-                </div>
-              ) : (
-                <div className="text-xs text-gray-600 max-w-xs">
-                  GEO metrics are not available yet for this item. Return to the
-              list, wait until the Geo score circle is filled, then open this
-              detail view.
-                </div>
-              )}
+              <GeoSummary item={item} geo={geo}/>
+              <SeoSummary/>
+              <PerformanceSummary/>
             </div>
 
           </div>
@@ -122,49 +95,67 @@ function LeftPanel({ item, geo }) {
     }
   };
 
+  const handleBack = () => {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+    } else {
+      router.push("/");
+    }
+  };
+
   return (
     <Panel>
       <div className="flex flex-col h-full justify-start">
         {/* Tabs Navigation */}
-        <div className="flex justify-evenly border-b border-gray-200 rounded-2xl mb-4 sticky top-0 bg-white z-10">
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`
-                px-4 py-2 text-sm font-medium transition-colors duration-150 ease-in-out
-                ${
-                  activeTab === tab
-                    ? "text-indigo-600 border-b-2 border-indigo-600" 
-                    : "text-gray-500 hover:text-gray-700"
-                }
-              `}
-            >
-              {/* Responsive Tab Text Logic */}
-              {tab === "Overview" ? (
-                <>
-                  <span className="md:hidden">OV</span> 
-                  <span className="hidden md:inline">Overview</span> 
-                </>
-              ) : tab === "Performance" ? (
-                <>
-                  <span className="md:hidden">Per.</span> 
-                  <span className="hidden md:inline">Performance</span> 
-                </>
-              ) : (
-                tab
-              )}
-            </button>
-          ))}
+        <div className="flex items-center justify-between">
+          <button
+            type="button"
+            onClick={handleBack}
+            className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50"
+          >
+            <span aria-hidden="true">←</span>
+            Back to results
+          </button>
+          <div className="flex justify-evenly border-b border-gray-200 rounded-full sticky bg-white z-10">
+
+            {tabs.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className="px-3 py-2" 
+              >
+                <span className={`
+                  px-3 py-1 text-xs rounded-2xl font-medium
+                  ${
+                    activeTab === tab
+                      ? "text-white border-b-2 bg-primary" 
+                      : "text-gray-500 hover:text-gray-700"
+                  }
+                `}>
+                  {/* Responsive Tab Text Logic */}
+                  {tab === "Overview" ? (
+                    <>
+                      <span className="md:hidden">OV</span> 
+                      <span className="hidden md:inline">Overview</span> 
+                    </>
+                  ) : tab === "Performance" ? (
+                    <>
+                      <span className="md:hidden">Per.</span> 
+                      <span className="hidden md:inline">Performance</span> 
+                    </>
+                  ) : (
+                    tab
+                  )}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Content Area */}
         <div className="pt-2 flex-grow overflow-y-auto">
           {renderContent()}
         </div>
-        <GeoSummary item={item} geo={geo}></GeoSummary>
-        <SeoSummary seo={seo}></SeoSummary>
-        <PerformanceSummary></PerformanceSummary>
       </div>
     </Panel>
   );
