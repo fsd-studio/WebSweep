@@ -1,91 +1,15 @@
+import { useDataCollection } from "context/DataCollectionContext";
+import Link from "next/link";
 import { useEffect } from "react";
 import Loading from "./Loading";
 import ScoreRing from "./ScoreRing";
-import { useDataCollection } from "context/DataCollectionContext";
-import { geoMetrics } from "lib/geo/geoMetrics";
-import Link from "next/link";
-
-const SCRAPER_API_URL = "http://localhost:5001/api/scrape";
+import { getGeo, getPerformance, getSeo } from "lib/universal/metricInitiators";
 
 function ListItem({ item, href}) {
     const { computedData, updateData } = useDataCollection();
     const mobileSeo = computedData[item.id]?.MOBILE?.SEO;
     const desktopPerformance = computedData[item.id]?.DESKTOP?.PERFORMANCE;
     const geo = computedData[item.id]?.GLOBAL?.GEO; 
-
-    async function getGeo(listObject) {
-      if (Array.isArray(listObject) && listObject.length > 0) {
-        try {
-            const response = await fetch(SCRAPER_API_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(listObject), 
-            });
-
-            if (!response.ok) {
-                const errorBody = await response.json();
-                throw new Error(`API error! Status: ${response.status}. Message: ${errorBody.error || 'Server error.'}`);
-            }
-
-            const finalGeoData = await response.json(); 
-            
-            const result = await geoMetrics(finalGeoData);
-
-            return result['0'].data
-        } catch (error) {
-            console.error("Failed to fetch geo data:", error);
-        }
-      };
-    }
-
-    async function getPerformance(href) {
-      try {
-        const response = await fetch('/api/lighthouse', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            href,
-            categories: ['PERFORMANCE'],
-            strategies: ['DESKTOP']
-          }),
-        });
-
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-        const result = await response.json();
-        return result.success ? result.data.DESKTOP.PERFORMANCE : { score: null, audits: {} };
-      } catch (error) {
-        console.error("Error fetching performance:", error);
-        return { score: null, audits: {}, error: error.message };
-      }
-    }
-
-    async function getSeo(href) {
-      try {
-        const response = await fetch('/api/lighthouse', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            href,
-            categories: ['SEO'],
-            strategies: ['MOBILE']
-          }),
-        });
-
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-        const result = await response.json()
-
-        console.log("result", result);
-        
-        return result.success ? result.data.MOBILE.SEO : { score: null, audits: {} };
-      } catch (error) {
-        console.error("Error fetching SEO:", error);
-        return { score: null, audits: {}, error: error.message };
-      }
-    }
 
     useEffect(() => {
         if (computedData[item.id]) return;
