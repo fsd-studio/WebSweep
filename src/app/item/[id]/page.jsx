@@ -11,41 +11,57 @@ export default function ItemPage({ params }) {
   const idParam = params?.id;
   const id = Number(idParam);
 
-  const { computedData } = useDataCollection();
+  const { computedData, updateData } = useDataCollection();
 
   const item = dataset.find((entry) => entry.id === id);
+
   const geo = computedData[id]?.GLOBAL?.GEO || null;
   const seo = computedData[id]?.MOBILE?.SEO || null;
-  const performance = computedData[id]?.PERFORMANCE?.DESKTOP || null;
-  const href = item.website ? (/^https?:\/\//i.test(item.website) ? item.website : `https://${item.website}`) : undefined;
+  const performance = computedData[id]?.DESKTOP?.PERFORMANCE || null;
+
+  const href =
+    item?.website && typeof item.website === "string"
+      ? /^https?:\/\//i.test(item.website)
+        ? item.website
+        : `https://${item.website}`
+      : undefined;
 
   useEffect(() => {
-    if (computedData[item.id]) return;
+    if (!item || computedData[item.id]) return;
 
-    console.log("the item", item)
-
-    getGeo([item]).then(result => {
+    getGeo([item]).then((result) => {
+      if (result) {
         updateData(item.id, "GLOBAL", "GEO", result);
-
-        console.log("result = ", result)
-        console.log(computedData)
+      }
     });
 
-    getSeo(href).then(result => {
-        console.log("seo result ", result)
+    if (href) {
+      getSeo(href).then((result) => {
+        if (result) {
+          updateData(item.id, "MOBILE", "SEO", result);
+        }
+      });
 
-        updateData(item.id, "MOBILE", "SEO", result);
-    });
+      getPerformance(href).then((result) => {
+        if (result) {
+          updateData(item.id, "DESKTOP", "PERFORMANCE", result);
+        }
+      });
+    }
+  }, [item, href, computedData, updateData]);
 
-    getPerformance(href).then(result => {
-        updateData(item.id, "DESKTOP", "PERFORMANCE", result);
-    });
-  }, [])
+  if (!item) {
+    return (
+      <div className="p-4 text-sm text-red-600">
+        Could not find this item in the dataset.
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-3 h-full">
       <div className="flex gap-3 h-full">
-        <LeftPanel item={item} geo={geo} />
+        <LeftPanel item={item} geo={geo} seo={seo} performance={performance} />
         <RightPanel item={item} />
       </div>
     </div>
