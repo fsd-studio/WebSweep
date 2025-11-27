@@ -60,3 +60,25 @@ function YourComponent() {
  
        mv envAPIkey .env
 
+
+4. **Prisma DB:** 
+
+- **View and debug the database:** Run `npx prisma studio` to open a visual database browser
+- **Modify the schema:** Edit `prisma/schema.prisma` to add/change models and fields
+- **Apply schema changes:** After modifying the schema, run `npx prisma migrate dev --name <migration_name>` (e.g., `npx prisma migrate dev --name add_user_table`)
+- **Generate Prisma Client:** Run `npx prisma generate` to regenerate the client after schema changes
+- **Seed the database:** Run `node prisma/seed.js` to populate the database with initial data
+- **Reset the database:** Run `npx prisma migrate reset` to clear all data and re-run migrations and seeds
+- **Fresh start:** Delete `prisma/dev.db` and run `npx prisma migrate dev` to recreate the database from scratch
+
+**Common workflow:**
+1. Edit `prisma/schema.prisma`
+2. Run `npx prisma migrate dev --name describe_your_change`
+3. Run `npx prisma generate` (usually done automatically by migrate)
+4. Update your seed file if needed (`prisma/seed.js`)
+5. Run `node prisma/seed.js` to populate data
+6. Use `npx prisma studio` to verify changes
+
+**Seed file location:** `prisma/seed.js` - modify this file to change what data is seeded into your database on initialization.
+
+
