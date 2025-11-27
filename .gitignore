@@ -46,3 +46,5 @@ storybook-static
 # venv
 .venv
 /src/generated/prisma
+
+/prisma/dev.db
