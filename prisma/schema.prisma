@@ -17,7 +17,8 @@ model Company {
   city      String?
   canton    String?
   category  String?
-  
+  geoMetrics Json?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

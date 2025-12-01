@@ -5,15 +5,28 @@ import LeftPanel from "./LeftPanel";
 import { useDataCollection } from "context/DataCollectionContext";
 import dataset from "/public/data/dataset-websweep.json";
 import { getGeo, getPerformance, getSeo } from "lib/universal/metricInitiators";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { useParams } from "next/navigation";
 
-export default function ItemPage({ params }) {
+const datasetWithIds = (dataset || []).map((entry, index) => ({
+  ...entry,
+  id: index + 1,
+}));
+
+export default function ItemPage() {
+  const params = useParams();
   const idParam = params?.id;
-  const id = Number(idParam);
+  const id = useMemo(() => {
+    if (Array.isArray(idParam)) return Number(idParam[0]);
+    return Number(idParam);
+  }, [idParam]);
 
   const { computedData, updateData } = useDataCollection();
 
-  const item = dataset.find((entry) => entry.id === id);
+  const item = useMemo(
+    () => datasetWithIds.find((entry) => entry.id === id),
+    [id]
+  );
 
   const geo = computedData[id]?.GLOBAL?.GEO || null;
   const seo = computedData[id]?.MOBILE?.SEO || null;

@@ -3,32 +3,51 @@ import { geoMetrics } from "lib/geo/geoMetrics";
 const SCRAPER_API_URL = "http://localhost:5001/api/scrape";
 
 export async function getGeo(listObject) {
-  if (Array.isArray(listObject) && listObject.length > 0) {
+  if (!Array.isArray(listObject) || listObject.length === 0) return;
+
+  const first = listObject[0];
+
+  if (first && typeof first.id === "number") {
     try {
-        const response = await fetch(SCRAPER_API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(listObject), 
-        });
-
-        if (!response.ok) {
-            const errorBody = await response.json();
-            throw new Error(`API error! Status: ${response.status}. Message: ${errorBody.error || 'Server error.'}`);
+      const dbRes = await fetch(`/api/company-geo/${first.id}`);
+      if (dbRes.ok) {
+        const dbJson = await dbRes.json();
+        if (dbJson?.success && dbJson.data) {
+          return dbJson.data;
         }
-
-        const finalGeoData = await response.json(); 
-        
-        const result = await geoMetrics(finalGeoData);
-
-        console.log("test1", result)
-
-        return result['0'].data
-    } catch (error) {
-        console.error("Failed to fetch geo data:", error);
+      }
+    } catch (err) {
+      console.error("Failed to fetch GEO metrics from DB, falling back:", err);
     }
-  };
+  }
+
+  try {
+    const response = await fetch(SCRAPER_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(listObject),
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.json();
+      throw new Error(
+        `API error! Status: ${response.status}. Message: ${
+          errorBody.error || "Server error."
+        }`
+      );
+    }
+
+    const finalGeoData = await response.json();
+    const result = await geoMetrics(finalGeoData);
+
+    console.log("test1", result);
+
+    return result["0"].data;
+  } catch (error) {
+    console.error("Failed to fetch geo data:", error);
+  }
 }
 
 export async function getPerformance(href) {

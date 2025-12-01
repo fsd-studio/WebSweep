@@ -75,24 +75,29 @@ function TypeaheadInput({ id, label, value, onChange, onSelect, source = [] }) {
 
 export default function DataCollectionModule() {
 
+  const datasetWithIds = useMemo(
+    () => (dataset || []).map((item, index) => ({ ...item, id: index + 1 })),
+    []
+  );
+
   const categories = useMemo(
-    () => uniqueFrom((dataset || []).map((c) => c.category)),
+    () => uniqueFrom((datasetWithIds || []).map((c) => c.category)),
     []
   );
 
   const citiesAll = useMemo(
-    () => uniqueFrom((dataset || []).map((c) => c.city)),
+    () => uniqueFrom((datasetWithIds || []).map((c) => c.city)),
     []
   );
 
   const cantonsAll = useMemo(
-    () => uniqueFrom((dataset || []).map((c) => c.canton)),
+    () => uniqueFrom((datasetWithIds || []).map((c) => c.canton)),
     []
   );
 
   const cityToCanton = useMemo(() => {
     const m = new Map();
-    for (const item of dataset || []) {
+    for (const item of datasetWithIds || []) {
       if (item?.city && item?.canton) {
         const k = normalize(item.city);
         if (!m.has(k)) m.set(k, item.canton);
@@ -103,7 +108,7 @@ export default function DataCollectionModule() {
 
   const cantonToCities = useMemo(() => {
     const m = new Map();
-    for (const item of dataset || []) {
+    for (const item of datasetWithIds || []) {
       if (item?.canton && item?.city) {
         const k = normalize(item.canton);
         if (!m.has(k)) m.set(k, new Set());
@@ -169,7 +174,7 @@ export default function DataCollectionModule() {
     const ac = normalize(searchApplied.category || '');
     const aCity = normalize(searchApplied.city || '');
     const aCanton = normalize(searchApplied.canton || '');
-    return (dataset || []).filter((item) => {
+    return (datasetWithIds || []).filter((item) => {
       const okCategory = !ac || (item.category && normalize(item.category).includes(ac));
       const okCity = !aCity || (item.city && normalize(item.city).includes(aCity));
       const okCanton = !aCanton || (item.canton && normalize(item.canton).includes(aCanton));
