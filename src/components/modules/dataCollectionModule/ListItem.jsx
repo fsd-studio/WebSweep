@@ -6,27 +6,38 @@ import ScoreRing from "./ScoreRing";
 import { getGeo, getPerformance, getSeo } from "lib/universal/metricInitiators";
 
 function ListItem({ item, href }) {
+
+
   const { computedData, updateData } = useDataCollection();
+  const id = item.id
   const mobileSeo = computedData[item.id]?.MOBILE?.SEO;
   const desktopPerformance = computedData[item.id]?.DESKTOP?.PERFORMANCE;
   const geo = computedData[item.id]?.GLOBAL?.GEO;
   const general = computedData[item.id]?.GENERAL?.SUMMARY;
 
   useEffect(() => {
-    if (computedData[item.id]) return;
+    if (!geo) {
+      getGeo([item]).then((result) => {
+        updateData(item.id, "GLOBAL", "GEO", result);
+      });
+    } 
 
-    getGeo([item]).then((result) => {
-      updateData(item.id, "GLOBAL", "GEO", result);
-    });
+    if (!mobileSeo) {
+      getSeo(href).then((result) => {
+        updateData(item.id, "MOBILE", "SEO", result);
+      });
+    }
 
-    getSeo(href).then((result) => {
-      updateData(item.id, "MOBILE", "SEO", result);
-    });
+    if (!desktopPerformance) {
+      getPerformance(href).then((result) => {
+        updateData(item.id, "DESKTOP", "PERFORMANCE", result);
+      });
+    }
 
-    getPerformance(href).then((result) => {
-      updateData(item.id, "DESKTOP", "PERFORMANCE", result);
-    });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    // if validation doesn't exists in DB run its function
+    
+
+  }, []);
 
   return (
     <Link href={`/item/${item.id}`}>

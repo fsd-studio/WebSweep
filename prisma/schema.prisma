@@ -8,16 +8,19 @@ datasource db {
 }
 
 model Company {
-  id        Int      @id @default(autoincrement())
-  title     String
-  purpose   String?  
-  website   String?
-  phone     String?
-  email     String?
-  city      String?
-  canton    String?
-  category  String?
-  geoMetrics Json?
+  id                 Int     @id @default(autoincrement())
+  title              String
+  purpose            String?
+  website            String?
+  phone              String?
+  email              String?
+  city               String?
+  canton             String?
+  category           String?
+  geoMetrics         Json?
+  seoMetrics         Json?
+  performanceMetrics Json?
+  validationMetrics  Json?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

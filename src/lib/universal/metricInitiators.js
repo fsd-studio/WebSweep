@@ -98,3 +98,8 @@ export async function getSeo(href) {
     return { score: null, audits: {}, error: error.message };
   }
 }
+
+
+// validation initiator should go here. It calls the primary function and returns the proper data.
+
+// the primary function should be an API in the app/api folder.

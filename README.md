@@ -79,6 +79,8 @@ function YourComponent() {
 5. Run `node prisma/seed.js` to populate data
 6. Use `npx prisma studio` to verify changes
 
+Ps: if the previous steps don't work run -> npx prisma migrate reset
+
 **Seed file location:** `prisma/seed.js` - modify this file to change what data is seeded into your database on initialization.
 
 
