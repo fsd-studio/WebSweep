@@ -1,55 +1,51 @@
 import Link from "next/link";
-import { IoSearch } from "react-icons/io5";
 
 export default function Layout({ children, fonts }) {
   return (
-    <div className={`${fonts} h-screen overflow-hidden flex flex-col lg:grid lg:grid-cols-6 px-5 gap-4 py-4`}>
-      {/* <Sidebar /> */}
-      <div className="p-5 xl:p-6 items-center col-span-1 md:flex justify-between lg:flex-col bg-blue-700 rounded-4xl">
-        {/* <Logo /> */}
-        <Logo />
+    <div className={`${fonts} min-h-screen bg-transparent text-gray-900`}>
+      <div className="relative overflow-hidden min-h-screen">
+        {/* Decorative shapes */}
+        <div className="pointer-events-none absolute -left-20 top-10 h-64 w-64 rounded-full bg-gradient-to-br from-indigo-200 to-pink-200 opacity-70 blur-3xl" />
+        <div className="pointer-events-none absolute right-[-120px] top-32 h-96 w-96 rounded-full bg-gradient-to-br from-blue-100 to-white opacity-70 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-10 left-10 h-10 w-10 rounded-full bg-pink-400 opacity-70" />
+        <div className="pointer-events-none absolute bottom-16 left-28 h-6 w-6 rounded-full bg-blue-600 opacity-80" />
+        <div className="pointer-events-none absolute bottom-20 left-40 h-4 w-4 rounded-full bg-black opacity-80" />
 
-        <div className="justify-center flex lg:items-end">
-          <ul className="flex gap-3 mt-2 lg:flex-col">
-            <SidebarLink href="/" icon={<IoSearch className="w-6 h-6"></IoSearch>} text="Search"></SidebarLink>
-            <SidebarLink href="/item/1" icon={<IoSearch className="w-6 h-6"></IoSearch>} text="item with ID 1"></SidebarLink>
-            <SidebarLink text="link3" icon={<IoSearch className="w-6 h-6"></IoSearch>}></SidebarLink>
-          </ul>
-        </div>
-      </div>
+        {/* Top navigation */}
+        <header className="relative z-10 flex items-center justify-between px-6 md:px-10 py-6">
+          <div className="flex items-center gap-4">
+            <Link href="/welcome" className="flex items-center gap-3">
+              <div className="h-12 w-12 rounded-full bg-gray-900 flex items-center justify-center shadow-md overflow-hidden">
+                <img src="/template/logo1.png" alt="WebSweep logo" className="h-8 w-8 object-contain" />
+              </div>
+            </Link>
+            <nav className="hidden md:flex items-center gap-6 text-xs font-semibold uppercase tracking-[0.2em] text-gray-800">
+              <Link href="/welcome" className="hover:text-black">WebSweep</Link>
+              <Link href="/" className="hover:text-black">Websites</Link>
+              <Link href="/buy" className="hover:text-black">Plans</Link>
+            </nav>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="hidden md:flex h-6 w-12 border-t-2 border-gray-800" />
+            <button
+              type="button"
+              className="flex flex-col gap-1.5 items-end"
+              aria-label="Menu"
+            >
+              <span className="h-0.5 w-6 bg-gray-900 rounded-full" />
+              <span className="h-0.5 w-9 bg-gray-900 rounded-full" />
+              <span className="h-0.5 w-5 bg-gray-900 rounded-full" />
+            </button>
+          </div>
+        </header>
 
-      {/* Main content area */}
-      <div className="lg:col-span-5 p-6 h-full overflow-y-auto border rounded-4xl">
-        {children}
+        {/* Main content */}
+        <main className="relative z-10 px-4 md:px-8 pb-12">
+          <div className="w-full max-w-[92rem] mx-auto rounded-[28px] bg-white/85 backdrop-blur border border-gray-100 shadow-2xl p-6 md:p-10">
+            {children}
+          </div>
+        </main>
       </div>
     </div>
-  );
-}
-
-function Logo() {
-  return (
-    <Link href="/">
-      <div className="relative">
-        <img src="/template/logo1.png" alt="Logo" className="h-14 mx-auto -mb-4 md:h-18 -rotate-14 w-auto" />
-        <h2 className="text-lg md:text-xl xl:text-2xl text-center text-white uppercase font-Lato relative z-10 font-extrabold tracking-wide">WebSweep</h2>
-      </div>
-    </Link>
-  );
-}
-
-function SidebarLink({ href = "/", text, icon }) {
-  return (
-    <li>
-      <Link
-        className="font-geist-mono flex items-center gap-3 px-4 py-3 bg-blue-800/70 text-white font-semibold text-lg rounded-2xl mx-auto"
-        href={href}
-
-      >
-        {icon}
-        <p className="hidden md:block">
-          {text}
-        </p>
-      </Link>
-    </li>
   );
 }

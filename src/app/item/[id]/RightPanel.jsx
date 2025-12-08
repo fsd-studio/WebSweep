@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { FiMonitor, FiTablet, FiSmartphone } from "react-icons/fi";
 import Panel from "./Panel";
 
@@ -8,13 +8,36 @@ function RightPanel({ item }) {
   const [iframeMessage, setIframeMessage] = useState("");
   const website = normalizeUrl(item?.website);
 
-  const views = {
-    desktop: { label: "Laptop", maxWidth: "max-w-5xl", aspect: "aspect-[16/10]", maxH: "max-h-[75vh]" },
-    tablet: { label: "Tablet", maxWidth: "max-w-3xl", aspect: "aspect-[4/3]", maxH: "max-h-[65vh]" },
-    mobile: { label: "Mobile", maxWidth: "max-w-[380px]", aspect: "aspect-[9/16]", maxH: "max-h-[70vh]" }, 
-  };
+  const containerRef = useRef(null);
+  const [scale, setScale] = useState(1);
+  const [scaledWidth, setScaledWidth] = useState(null);
+
+  const views = useMemo(
+    () => ({
+      desktop: { label: "Laptop", width: 1440, height: 900, minHeight: 300, maxHeight: 300 },
+      tablet: { label: "Tablet", width: 1024, height: 768, minHeight: 300, maxHeight: 300 },
+      mobile: { label: "Mobile", width: 430, height: 720, minHeight: 300, maxHeight: 300 },
+    }),
+    []
+  );
 
   const currentView = views[view] || views.desktop;
+
+  useEffect(() => {
+    const targetWidth = currentView.width;
+    const measure = () => {
+      const el = containerRef.current;
+      if (!el) return;
+      const parentWidth = el.parentElement?.clientWidth || targetWidth;
+      const nextScale = Math.min(1, parentWidth / targetWidth);
+      const nextWidth = targetWidth * nextScale;
+      setScale((prev) => (Math.abs(prev - nextScale) < 0.001 ? prev : nextScale));
+      setScaledWidth((prev) => (prev && Math.abs(prev - nextWidth) < 1 ? prev : nextWidth));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [view, currentView.width]);
 
   useEffect(() => {
     if (!website) {
@@ -72,12 +95,26 @@ function RightPanel({ item }) {
           </div>
         </div>
         {website ? (
-          <div className={`relative w-full ${currentView.maxWidth} ${currentView.maxH} overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm`}>
-            <div className={`${currentView.aspect} h-full`}>
+          <div
+            className="relative w-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg mx-auto"
+            ref={containerRef}
+            style={{
+              width: scaledWidth ? `${scaledWidth}px` : "100%",
+              maxWidth: "100%",
+              minHeight: `${Math.max(currentView.minHeight, currentView.height * (scaledWidth ? scale : 1))}px`,
+              maxHeight: `${currentView.maxHeight}px`,
+            }}
+          >
+            <div className="relative" style={{
+              width: `${currentView.width}px`,
+              height: `${currentView.height}px`,
+              transform: `scale(${scale})`,
+              transformOrigin: "top left",
+            }}>
               <iframe
                 src={website}
                 title={item?.title || "Website preview"}
-                className="w-full h-full rounded-[10px]"
+                className="w-full h-full rounded-[14px]"
                 onLoad={handleLoad}
                 onError={handleError}
               />

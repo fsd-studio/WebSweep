@@ -125,6 +125,7 @@ export default function DataCollectionModule() {
   const cantonId = useId();
 
   const { 
+    computedData,
     category, 
     setCategory, 
     canton, 
@@ -136,6 +137,9 @@ export default function DataCollectionModule() {
     searchApplied,
     setSearchApplied,
   } = useDataCollection();
+
+  const [sortKey, setSortKey] = useState('none'); // none | geo | seo | performance | general
+  const [sortOrder, setSortOrder] = useState('asc'); // asc | desc
 
   const cantonSource = useMemo(() => {
     const mapped = city ? cityToCanton.get(normalize(city)) : null;
@@ -180,7 +184,62 @@ export default function DataCollectionModule() {
       const okCanton = !aCanton || (item.canton && normalize(item.canton).includes(aCanton));
       return okCategory && okCity && okCanton;
     });
-  }, [searchApplied, dataset]);
+  }, [searchApplied, datasetWithIds]);
+
+  const scoreFor = useCallback(
+    (item, key) => {
+      const data = computedData?.[item.id];
+      if (!data) return null;
+      switch (key) {
+        case 'geo':
+          return Number.isFinite(data.GLOBAL?.GEO?.composite?.score)
+            ? data.GLOBAL.GEO.composite.score
+            : null;
+        case 'seo':
+          return data.MOBILE?.SEO?.score != null
+            ? data.MOBILE.SEO.score * 100
+            : null;
+        case 'performance':
+          return data.DESKTOP?.PERFORMANCE?.score != null
+            ? data.DESKTOP.PERFORMANCE.score * 100
+            : null;
+        case 'general':
+          return Number.isFinite(data.GENERAL?.SUMMARY?.score)
+            ? data.GENERAL.SUMMARY.score
+            : null;
+        default:
+          return null;
+      }
+    },
+    [computedData]
+  );
+
+  const sorted = useMemo(() => {
+    if (!filtered.length || sortKey === 'none') return filtered;
+    return [...filtered].sort((a, b) => {
+      const aScore = scoreFor(a, sortKey);
+      const bScore = scoreFor(b, sortKey);
+      const missingA = aScore == null || !Number.isFinite(aScore);
+      const missingB = bScore == null || !Number.isFinite(bScore);
+      if (missingA && missingB) return 0;
+      if (missingA) return 1; // push missing to bottom
+      if (missingB) return -1;
+      return sortOrder === 'desc' ? bScore - aScore : aScore - bScore;
+    });
+  }, [filtered, sortKey, sortOrder, scoreFor]);
+
+  const handleSortToggle = useCallback(
+    (key) => {
+      setCurrentPage(1);
+      if (sortKey !== key) {
+        setSortKey(key);
+        setSortOrder('asc');
+      } else {
+        setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+      }
+    },
+    [sortKey, setCurrentPage]
+  );
 
   const handleSearch = useCallback(() => {
     setSearchApplied({ category, city, canton });
@@ -265,7 +324,14 @@ export default function DataCollectionModule() {
         </div>
       </div>
 
-      <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} filtered={filtered}/>
+      <Pagination
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        filtered={sorted}
+        onSort={handleSortToggle}
+        sortKey={sortKey}
+        sortOrder={sortOrder}
+      />
     </section>
   );
 }

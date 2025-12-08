@@ -31,6 +31,7 @@ export default function ItemPage() {
   const geo = computedData[id]?.GLOBAL?.GEO || null;
   const seo = computedData[id]?.MOBILE?.SEO || null;
   const performance = computedData[id]?.DESKTOP?.PERFORMANCE || null;
+  const general = computedData[id]?.GENERAL?.SUMMARY || null;
 
   const href =
     item?.website && typeof item.website === "string"
@@ -72,10 +73,14 @@ export default function ItemPage() {
   }
 
   return (
-    <div className="flex flex-col gap-3 h-full">
-      <div className="flex gap-3 h-full">
-        <LeftPanel item={item} geo={geo} seo={seo} performance={performance} />
-        <RightPanel item={item} />
+    <div className="flex flex-col gap-6 h-full">
+      <div className="flex gap-6 h-full w-full">
+        <div className="flex-[1.5] min-w-0">
+          <LeftPanel item={item} geo={geo} seo={seo} performance={performance} general={general} />
+        </div>
+        <div className="flex-[1.5] min-w-0">
+          <RightPanel item={item} />
+        </div>
       </div>
     </div>
   );

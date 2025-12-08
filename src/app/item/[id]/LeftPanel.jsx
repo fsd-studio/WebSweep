@@ -5,8 +5,9 @@ import GeoSummary from "./evaluations/GeoSummary";
 import GeoDetail from "./evaluations/GeoDetail";
 import SeoSummary from "./evaluations/SeoSummary";
 import PerformanceSummary from "./evaluations/PerformanceSummary";
+import ScoreRing from "../../../components/modules/dataCollectionModule/ScoreRing";
 
-function LeftPanel({ item, geo, seo, performance }) {
+function LeftPanel({ item, geo, seo, performance, general }) {
   const tabs = ["Overview", "GEO", "SEO", "Performance"];
   const [activeTab, setActiveTab] = useState("Overview");
 
@@ -79,6 +80,23 @@ function LeftPanel({ item, geo, seo, performance }) {
 
       {/* Summary cards */}
       <div className="space-y-2">
+        <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-4 flex items-center gap-3">
+          <div className="w-16">
+            {general?.score != null ? (
+              <ScoreRing score={general.score} />
+            ) : (
+              <div className="text-sm text-gray-500">Loading...</div>
+            )}
+          </div>
+          <div>
+            <div className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+              General
+            </div>
+            <div className="text-sm text-gray-700">
+              Combined GEO, SEO, and Performance score.
+            </div>
+          </div>
+        </div>
         <GeoSummary item={item} geo={geo} />
         <SeoSummary seo={seo} />
         <PerformanceSummary performance={performance} />
