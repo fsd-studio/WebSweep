@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import Loading from "./Loading";
 import ScoreRing from "./ScoreRing";
-import { getGeo, getPerformance, getSeo } from "lib/universal/metricInitiators";
+import { getGeo, getPerformance, getSeo, getValidationSummary } from "lib/universal/metricInitiators";
 
 function ListItem({ item, href }) {
 
@@ -14,28 +14,42 @@ function ListItem({ item, href }) {
   const desktopPerformance = computedData[item.id]?.DESKTOP?.PERFORMANCE;
   const geo = computedData[item.id]?.GLOBAL?.GEO;
   const general = computedData[item.id]?.GENERAL?.SUMMARY;
+  const validationData = computedData[item.id]?.GLOBAL?.VALIDATION;
 
   useEffect(() => {
-    if (!geo) {
-      getGeo([item]).then((result) => {
-        updateData(item.id, "GLOBAL", "GEO", result);
-      });
-    } 
+    
+      getGeo([item]).then((result) => {
+        
+          // New Logic: Check for the success and extract individual metrics
+        if (result?.success && result.metrics) {
 
-    if (!mobileSeo) {
-      getSeo(href).then((result) => {
-        updateData(item.id, "MOBILE", "SEO", result);
-      });
-    }
+            // 1. GEO Metric (The key we were missing before)
+            if (result.metrics.geo) {
+              console.log("Geo Score Check:", geo?.composite?.score);
+              updateData(item.id, "GLOBAL", "GEO", result.metrics.geo);
+              console.log("Update sent for GEO:", result.metrics.geo?.composite?.score);
+}
+            
+            // 2. SEO Metric (Extracted from orchestrator response)
+            if (result.metrics.seo) {
+              updateData(item.id, "MOBILE", "SEO", result.metrics.seo);
+            }
 
-    if (!desktopPerformance) {
-      getPerformance(href).then((result) => {
-        updateData(item.id, "DESKTOP", "PERFORMANCE", result);
-      });
-    }
+            // 3. Performance Metric (Extracted from orchestrator response)
+            if (result.metrics.performance) {
+              updateData(item.id, "DESKTOP", "PERFORMANCE", result.metrics.performance);
+            }
 
-    // if validation doesn't exists in DB run its function
-    
+            // 4. Validation Metric (Extracted from orchestrator response)
+            if (result.metrics.validation) {
+              updateData(item.id, "GLOBAL", "VALIDATION", result.metrics.validation);
+            }
+            
+        } else {
+            console.error("Orchestrator returned an error or no metrics:", result?.error);
+        }
+      });
+    
 
   }, []);
 
