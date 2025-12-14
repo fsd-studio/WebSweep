@@ -1,7 +1,12 @@
-const { PrismaClient } = require("@prisma/client");
-const fs = require("fs");
+import { PrismaClient } from "../generated/prisma/client.js" // or "../app/generated/prisma/client" depending on your output
+import { PrismaPg } from "@prisma/adapter-pg"
+import fs from "fs"
 
-const prisma = new PrismaClient();
+const adapter = new PrismaPg({
+  connectionString: process.env.DATABASE_URL,
+})
+
+const prisma = new PrismaClient({ adapter })
 
 async function main() {
   const companies = JSON.parse(

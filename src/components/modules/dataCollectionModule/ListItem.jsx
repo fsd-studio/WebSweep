@@ -46,6 +46,7 @@ function ListItem({ item, href }) {
             }
             
         } else {
+            console.log(result)
             console.error("Orchestrator returned an error or no metrics:", result?.error);
         }
       });

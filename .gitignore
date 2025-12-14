@@ -48,3 +48,4 @@ storybook-static
 /src/generated/prisma
 
 /prisma/dev.db
+/generated/**
