@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../../../../../generated/prisma/client.js";
 import { runGeo } from "lib/geo";
 import { runW3CValidation } from "lib/validation/validation";
 import { getPerformance, getSeo } from "lib/universal/metricInitiators";
+import { PrismaPg } from "@prisma/adapter-pg";
+
+const adapter = new PrismaPg({
+  connectionString: process.env.DATABASE_URL,
+});
 
 // Prisma client with simple global caching for dev
-const globalForPrisma = globalThis._prisma || new PrismaClient();
+const globalForPrisma = globalThis._prisma || new PrismaClient({ adapter });
 if (process.env.NODE_ENV !== "production") {
   globalThis._prisma = globalForPrisma;
 }
