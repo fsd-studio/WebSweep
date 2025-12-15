@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FiLogIn, FiUser } from "react-icons/fi";
 
 export default function Layout({ children, fonts }) {
   return (
@@ -26,15 +27,19 @@ export default function Layout({ children, fonts }) {
             </nav>
           </div>
           <div className="flex items-center gap-4">
-            <div className="hidden md:flex h-6 w-12 border-t-2 border-gray-800" />
             <button
               type="button"
-              className="flex flex-col gap-1.5 items-end"
-              aria-label="Menu"
+              className="inline-flex items-center gap-2 rounded-full border border-gray-900/10 bg-white/90 px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm transition hover:-translate-y-[1px] hover:shadow-md"
             >
-              <span className="h-0.5 w-6 bg-gray-900 rounded-full" />
-              <span className="h-0.5 w-9 bg-gray-900 rounded-full" />
-              <span className="h-0.5 w-5 bg-gray-900 rounded-full" />
+              <FiLogIn className="h-4 w-4" />
+              Login
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-2 rounded-full bg-gray-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-[1px] hover:shadow-md"
+            >
+              <FiUser className="h-4 w-4" />
+              Profile
             </button>
           </div>
         </header>
