@@ -16,7 +16,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 const prisma = globalForPrisma;
 
-export const config = { maxDuration: 120 };
+export const maxDuration = 120;
 
 export async function GET(_req, { params }) {
   // In Next.js 15 dynamic routes, params is async

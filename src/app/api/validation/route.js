@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { runW3CValidation } from "lib/validation/validation";
 
 
-export const config = { maxDuration: 300 };
+export const maxDuration = 300;
 
 /**
  * Handles POST requests to run W3C validation on a list of URLs.

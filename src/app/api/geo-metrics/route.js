@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { runGeo } from "lib/geo";
 
-export const config = { maxDuration: 120 };
+export const maxDuration = 120 
 
 export async function POST(req) {
   try {
