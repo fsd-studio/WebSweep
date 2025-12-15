@@ -3,11 +3,15 @@ import React, { useState } from "react";
 import Panel from "./Panel";
 import GeoSummary from "./evaluations/GeoSummary";
 import GeoDetail from "./evaluations/GeoDetail";
-import SeoSummary from "./evaluations/SeoSummary";
-import PerformanceSummary from "./evaluations/PerformanceSummary";
 import ScoreRing from "../../../components/modules/dataCollectionModule/ScoreRing";
+import LightHouseSummary from "./evaluations/LIghthouseSummary";
+import Lighthouse from "./evaluations/Lighthouse";
+import SEODetail from "./evaluations/SEODetail";
+import PerformanceDetail from "./evaluations/PerformanceDetail";
+import MainScoreCard from "./evaluations/MainScoreCard";
+import ValidationSummary from "./evaluations/ValidationSummary";
 
-function LeftPanel({ item, geo, seo, performance, general }) {
+function LeftPanel({ item, geo, seo, validation, performance, general }) {
   const tabs = ["Overview", "GEO", "SEO", "Performance"];
   const [activeTab, setActiveTab] = useState("Overview");
 
@@ -80,26 +84,13 @@ function LeftPanel({ item, geo, seo, performance, general }) {
 
       {/* Summary cards */}
       <div className="space-y-2">
-        <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-4 flex items-center gap-3">
-          <div className="w-16">
-            {general?.score != null ? (
-              <ScoreRing score={general.score} />
-            ) : (
-              <div className="text-sm text-gray-500">Loading...</div>
-            )}
-          </div>
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-              General
-            </div>
-            <div className="text-sm text-gray-700">
-              Combined GEO, SEO, and Performance score.
-            </div>
-          </div>
-        </div>
+        <MainScoreCard title="General" description="Combined GEO, SEO, and Performance score." score={general?.score} />
+        <MainScoreCard title="Performance" description="Aggregate Lighthouse performance score" score={performance?.score} multiplier={100} />
+        <MainScoreCard title="SEO" description="Aggregate Lighthouse SEO score" score={seo?.score} multiplier={100} />
+
+        <ValidationSummary warnings={validation?.warning_count} errors={validation?.error_count} />
+
         <GeoSummary item={item} geo={geo} />
-        <SeoSummary seo={seo} />
-        <PerformanceSummary performance={performance} />
       </div>
     </div>
   );
@@ -116,15 +107,11 @@ function LeftPanel({ item, geo, seo, performance, general }) {
   );
 
   const renderSeo = () => (
-    <div className="text-sm text-gray-700">
-      SEO analysis and metrics will be displayed here.
-    </div>
+    <SEODetail seo={seo}/>
   );
 
   const renderPerformance = () => (
-    <div className="text-sm text-gray-700">
-      Performance statistics will be displayed here.
-    </div>
+    <PerformanceDetail performance={performance}/>
   );
 
   const renderContent = () => {
@@ -190,7 +177,7 @@ function LeftPanel({ item, geo, seo, performance, general }) {
         </div>
 
         {/* Content */}
-        <div className="pt-2 flex-grow overflow-y-auto">{renderContent()}</div>
+        <div className="pt-2 flex-grow overflow-y-visible">{renderContent()}</div>
       </div>
     </Panel>
   );

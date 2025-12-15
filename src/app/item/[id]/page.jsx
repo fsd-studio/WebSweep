@@ -56,6 +56,7 @@ export default function ItemPage() {
   }, [fetchItem]);
   
   const geo = computedData[id]?.GLOBAL?.GEO || null;
+  const validation = computedData[id]?.GLOBAL?.VALIDATION || null;
   const seo = computedData[id]?.MOBILE?.SEO || null;
   const performance = computedData[id]?.DESKTOP?.PERFORMANCE || null;
   const general = computedData[id]?.GENERAL?.SUMMARY || null;
@@ -119,7 +120,7 @@ export default function ItemPage() {
     <div className="flex flex-col gap-6 h-full">
       <div className="flex gap-6 h-full w-full">
         <div className="flex-[1.5] min-w-0">
-          <LeftPanel item={item} geo={geo} seo={seo} performance={performance} general={general} />
+          <LeftPanel validation={validation} item={item} geo={geo} seo={seo} performance={performance} general={general} />
         </div>
         <div className="flex-[1.5] min-w-0">
           <RightPanel item={item} />
