@@ -1,86 +1,37 @@
-# FSD Studio Template
+# Websweep
 
-Web Scraper and GeoData Analyzer: Quick Start
+**Targeted Leads for Web-developers.**
 
-1. Running the Application (Terminal Instructions)
+Websweep distinguishes itself as a lead generation tool by utilizing a layered diagnostics approach that provides an assessment of a target website’s digital health. Unlike competitors that provide broad lead generation or exhaustive technical audits, WebSweep processes data across four distinct analytical pillars: GEO (Generative Engine Optimization), SEO (Search Engine Optimization), Performance Metrics, W3C Validation Metrics and an aggregated General Score of them all. These metrics are some of the most important and relevant ones for modern web developers. GEO is an innovative metric based on the research of Aggarwal et al. (2024), “GEO: Generative Engine Optimization,”, that assesses AI understanding of a website, among other things; SEO and performance metrics are a key part of Google’s industry standard Lighthouse metrics, lastly, W3C validation is a long-standing validation too which assesses websites to standardized HTML rules.   
 
-You must run both the Python Backend and the React Frontend simultaneously. Open two separate terminal windows inside the root of the project folder.
+Of course, to judge a website, a web developer can’t just look at the statistics, they must see the actual website, judge the styling, assess the responsiveness, and read its written content. WebSweep handles this by displaying websites locally, on our site, so the user doesn’t even have to leave the page. This page viewer also allows you to quickly toggle between desktop, tablet, and mobile views, allowing for easy responsiveness checks. We believe that our industry-standard, as well as innovative metrics, alongside the locally displayed website, will not only save developers a lot of time; it will also allow them to assess website quality accurately. 
 
-**Terminal 1: Start the Backend (Python Flask Server), ...path/backend**
+WebSweep automates and centralizes essential analytical lead data for swiss web-developers. Thanks to WebSweep's search functionality, web-developers will be able to search for their customer group according to canton, city and category. Once they have received the list of companies matching their needs, they will see the summarized scores of the evaluation of metrics. Additionally, they can receive a more exhaustive explanation of a specific company by opening their respective details page. On this page, they can see a vast set of metrics and explanations. They are also able to immediately see the chosen website without having to leave our page and could even toggle between the different views to check responsivity. 
 
-This runs the server that handles the web scraping logic, available at http://localhost:5000.
+## Setup
 
-Environment Setup & Dependencies:
+### 1. Run: `npm install` 
 
-python -m venv venv 
-source venv/bin/activate  for macOS/Linux
-Use venv\Scripts\activate for Windows
-pip install flask flask-cors requests beautifulsoup4
+    If you run into a Node versioning error, be sure to install and use Node version 24+
 
+### 2. create .env file in the project root
 
-Run the Flask Server:
-Keep this terminal window open and running.
+In the file be sure to include the following: 
+> PAGESPEED_API_KEY=AIzaSyAJ9ZU879Zyz1P2xh4-MnHnMeM5CidmDu0
 
-python geo_scraper.py
+> SCRAPER_API_URL=http://localhost:5001/scrape
 
+> DATABASE_URL="postgres://05e100763b3b081fb06bcdd5fae697314483a2f0ba19e199c4d1298291dcb46a:sk_ZXXojJVQ58R7BgmHSPZ7z@db.prisma.io:5432/postgres?sslmode=requires"
 
-**Terminal 2: Start the Frontend (React App)** ️
+> TOGETHER_API_KEY=e8db164ffe23f1fdb364a6a31ca878914c6ce04fdfb55947ed19435fa1d74136
 
-This runs the client application, typically opening a browser window at http://localhost:3000.
+> GEO_EXTRACT_MODEL=meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
 
-Install Node Dependencies:
+> GEO_EVAL_MODEL=openai/gpt-oss-120b
+### 3. Run: `npx prisma generate`
 
-npm install
+    This will create the necesarry Prisma client, schema, and migration files for the DB to work properly. 
 
+### 4. Run: `npm run dev`
 
-Start the React Application:
-
-npm run dev
-
-
-The application will start, and the GeoData component will automatically call the running Flask server to fetch the data.
-
-2. Accessing Scraped Data (For Developers)
-
-The final scraped JSON data is stored in the React Context, making it available globally. Any consumer component can retrieve the data using the useDataCollection hook:
-# ------------------
-import { useDataCollection } from 'context/DataCollectionContext'; 
-
-function YourComponent() {
-
-    const { geoDataCollection } = useDataCollection(); 
-    
-}
-# ------------------
-
-
-3. **For GEO:**
-   
-   Rename the environment file and add your Together.ai API key:
- 
-       mv envAPIkey .env
-
-
-4. **Prisma DB:** 
-
-- **View and debug the database:** Run `npx prisma studio` to open a visual database browser
-- **Modify the schema:** Edit `prisma/schema.prisma` to add/change models and fields
-- **Apply schema changes:** After modifying the schema, run `npx prisma migrate dev --name <migration_name>` (e.g., `npx prisma migrate dev --name add_user_table`)
-- **Generate Prisma Client:** Run `npx prisma generate` to regenerate the client after schema changes
-- **Seed the database:** Run `node prisma/seed.js` to populate the database with initial data
-- **Reset the database:** Run `npx prisma migrate reset` to clear all data and re-run migrations and seeds
-- **Fresh start:** Delete `prisma/dev.db` and run `npx prisma migrate dev` to recreate the database from scratch
-
-**Common workflow:**
-1. Edit `prisma/schema.prisma`
-2. Run `npx prisma migrate dev --name describe_your_change`
-3. Run `npx prisma generate` (usually done automatically by migrate)
-4. Update your seed file if needed (`prisma/seed.js`)
-5. Run `node prisma/seed.js` to populate data
-6. Use `npx prisma studio` to verify changes
-
-Ps: if the previous steps don't work run -> npx prisma migrate reset
-
-**Seed file location:** `prisma/seed.js` - modify this file to change what data is seeded into your database on initialization.
-
-
+    This will start the development server and the setup should be complete. 
