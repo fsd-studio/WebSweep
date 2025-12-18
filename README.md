@@ -12,26 +12,25 @@ WebSweep automates and centralizes essential analytical lead data for swiss web-
 
 ### 1. Run: `npm install` 
 
-    If you run into a Node versioning error, be sure to install and use Node version 24+
+> If you run into a Node versioning error, be sure to install and use Node version 24+
 
 ### 2. create .env file in the project root
 
 In the file be sure to include the following: 
-> PAGESPEED_API_KEY=AIzaSyAJ9ZU879Zyz1P2xh4-MnHnMeM5CidmDu0
 
-> SCRAPER_API_URL=http://localhost:5001/scrape
+    PAGESPEED_API_KEY=""
+    SCRAPER_API_URL=""
+    DATABASE_URL=""
+    TOGETHER_API_KEY=""
+    GEO_EXTRACT_MODEL=meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
+    GEO_EVAL_MODEL=openai/gpt-oss-120b
 
-> DATABASE_URL="postgres://05e100763b3b081fb06bcdd5fae697314483a2f0ba19e199c4d1298291dcb46a:sk_ZXXojJVQ58R7BgmHSPZ7z@db.prisma.io:5432/postgres?sslmode=requires"
+> To get the right env variables contact the following address -> vanms1@bfh.ch
 
-> TOGETHER_API_KEY=e8db164ffe23f1fdb364a6a31ca878914c6ce04fdfb55947ed19435fa1d74136
-
-> GEO_EXTRACT_MODEL=meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
-
-> GEO_EVAL_MODEL=openai/gpt-oss-120b
 ### 3. Run: `npx prisma generate`
 
-    This will create the necesarry Prisma client, schema, and migration files for the DB to work properly. 
+> This will create the necesarry Prisma client, schema, and migration files for the DB to work properly. 
 
 ### 4. Run: `npm run dev`
 
-    This will start the development server and the setup should be complete. 
+> This will start the development server and the setup should be complete. 
